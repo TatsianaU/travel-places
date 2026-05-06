@@ -21,29 +21,81 @@
 }
 
 .place-card-content {
-  padding: 16px 20px 20px;
+  padding: 18px 20px 20px;
 }
 
 .place-card-title {
+  margin: 0 0 10px 0;
   font-size: 1.3rem;
-  margin: 0 0 6px 0;
   color: #1a1a2e;
+}
+
+.place-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
 }
 
 .place-card-country {
   display: inline-block;
   background: #eef2ff;
   color: #667eea;
-  padding: 2px 10px;
+  padding: 4px 10px;
   border-radius: 12px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  margin-bottom: 10px;
+}
+
+.details-button {
+  padding: 7px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #8c82fc;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.details-button:hover {
+  background: #5a4ad1;
+  box-shadow: 0 4px 10px rgba(108, 92, 231, 0.25);
 }
 
 .place-card-description {
-  color: 555;
+  margin: 0 0 8px 0;
+  min-height: 72px;
+  color: #555;
   font-size: 0.95rem;
-  line-height: 1.5;
-  margin: 0;
+  line-height: 1.6;
+  display: block;
+}
+
+.place-card-description.hidden {
+  min-height: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.place-list-note {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 10px 12px;
+  background: #f0fdf4;
+  color: #16a34a;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.details-button.active {
+  background: #4f46b5;
+}
+
+.details-button.active:hover {
+  background: #4338ca;
 }
