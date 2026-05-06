@@ -1,0 +1,31 @@
+.greeting-container {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 15px;
+  padding: 30px;
+  margin: 40px auto;
+  max-width: 900px;
+  text-align: center;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.greeting-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.4rem;
+  color: #2d3436;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.greeting-name {
+  color: #6c5ce7;
+  font-weight: 800;
+  text-transform: capitalize;
+  border-bottom: 2px solid #a29bfe;
+}
+
+.greeting-brand {
+  font-weight: 600;
+  color: #0984e3;
+  letter-spacing: 0.5px;
+}
