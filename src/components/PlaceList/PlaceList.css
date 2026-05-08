@@ -1,6 +1,7 @@
 .place-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, 360px);
+  justify-content: center;
   gap: 24px;
   padding: 32px 24px;
   max-width: 1200px;
@@ -9,7 +10,7 @@
 
 .place-list-note {
   margin: 12px 0 0 0;
-  padding:  8px 12px;
+  padding: 8px 12px;
   background: #f0fdf4;
   color: #16a34a;
   border-radius: 8px;

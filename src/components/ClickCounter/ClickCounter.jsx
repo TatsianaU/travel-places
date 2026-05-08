@@ -6,7 +6,7 @@ export default function ClickCounter() {
   const [count, setCount] = useState(0)
 
   const increment = () => {
-    setCount(count + 1)
+    setCount((prevCount) => prevCount + 1)
   }
 
   const reset = () => {

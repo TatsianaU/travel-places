@@ -31,7 +31,7 @@ export default function PlaceCard({ title, description, country, imageUrl, child
           </button>
         </div>
 
-        <p className={showDetails ? 'place-card-description' : 'place-card-description hidden'}>{description}</p>
+        {showDetails && <p className="place-card-description">{description}</p>}
 
         {/* children - это все, что передано между <PlaceCard></PlaceCard> */}
         {/* Если children не переданы, блок не отрисуется */}
