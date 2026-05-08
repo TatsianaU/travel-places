@@ -1,6 +1,6 @@
 import './Greeting.css'
 
-const Greeting = ({ name }) => {
+const Greeting = ({ name = 'Гость' }) => {
   return (
     <div className="greeting-container">
       <p className="greeting-text">

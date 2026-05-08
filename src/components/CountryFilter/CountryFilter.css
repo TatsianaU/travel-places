@@ -1,0 +1,30 @@
+.country-filter {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0 30px;
+}
+
+.filter-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #dfe6fd;
+  color: #4b4b7a;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.filter-button:hover {
+  background: #c8d3fc;
+}
+
+.filter-button.active {
+  background: #6f64c9;
+  color: white;
+}
