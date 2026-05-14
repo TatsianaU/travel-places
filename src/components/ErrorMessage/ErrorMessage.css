@@ -1,0 +1,50 @@
+.error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 18px;
+
+  padding: 48px 0;
+
+  text-align: center;
+}
+
+.error-message-text {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.5;
+
+  color: #636e72;
+}
+
+.error-message-button {
+  padding: 12px 22px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #6c5ce7;
+  color: white;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.error-message-button:hover {
+  background: #5a4ad1;
+
+  transform: translateY(-1px);
+}
+
+.error-message-button:active {
+  transform: scale(0.98);
+}
