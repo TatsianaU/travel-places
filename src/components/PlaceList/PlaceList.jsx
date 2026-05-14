@@ -2,10 +2,10 @@ import './PlaceList.css'
 
 import PlaceCard from '../PlaceCard/PlaceCard'
 
-export default function PlaceList({ places, selectedCountry }) {
+export default function PlaceList({ places, selectedCountry, searchQuery }) {
   return (
     <section className="place-list-section">
-      {selectedCountry !== 'All' && <p className="place-list-count">Найдено мест: {places.length}</p>}
+      {searchQuery.trim() !== '' && <p className="place-list-count">Найдено мест: {places.length}</p>}
 
       {places.length === 0 && <p className="place-list-empty">Ничего не найдено по вашему запросу.</p>}
 

@@ -12,28 +12,32 @@ export default function AddPlaceForm({ onAddPlace }) {
   async function handleSubmit(event) {
     event.preventDefault()
 
+    if (isSubmitting) {
+      return
+    }
+
     if (title.trim() === '' || country.trim() === '') {
       return
     }
 
     setIsSubmitting(true)
 
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    try {
+      const newPlace = {
+        id: Date.now(),
+        title: title.trim(),
+        country: country.trim(),
+        description: `Откройте для себя место ${title.trim()} в стране ${country.trim()}`,
+        imageUrl: 'https://picsum.photos/400/300',
+      }
 
-    const newPlace = {
-      id: Date.now(),
-      title: title.trim(),
-      country: country.trim(),
-      description: `Откройте для себя место ${title.trim()} в стране ${country.trim()}`,
-      imageUrl: 'https://picsum.photos/400/300',
+      await onAddPlace(newPlace)
+
+      setTitle('')
+      setCountry('')
+    } finally {
+      setIsSubmitting(false)
     }
-
-    onAddPlace(newPlace)
-
-    setTitle('')
-    setCountry('')
-
-    setIsSubmitting(false)
   }
 
   return (
