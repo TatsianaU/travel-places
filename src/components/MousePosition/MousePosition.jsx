@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
-
 import './MousePosition.css'
+
+import { useEffect, useState } from 'react'
 
 export default function MousePosition() {
   const [position, setPosition] = useState({

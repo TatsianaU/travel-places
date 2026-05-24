@@ -3,7 +3,6 @@ import './App.css'
 import { useEffect, useState } from 'react'
 
 import { createPlace, fetchPlaces } from './api/places'
-import AddPlaceForm from './components/AddPlaceForm/AddPlaceForm'
 import ClickCounter from './components/ClickCounter/ClickCounter'
 import Clock from './components/Clock/Clock'
 import CountryFilter from './components/CountryFilter/CountryFilter'
@@ -12,6 +11,7 @@ import Footer from './components/Footer/Footer'
 import Greeting from './components/Greeting/Greeting'
 import Header from './components/Header/Header'
 import MousePosition from './components/MousePosition/MousePosition'
+import PlaceForm from './components/PlaceForm/PlaceForm'
 import PlaceList from './components/PlaceList/PlaceList'
 import SearchFilter from './components/SearchFilter/SearchFilter'
 import Section from './components/Section/Section'
@@ -58,10 +58,12 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (searchQuery.trim() === '') {
+    const trimmedQuery = searchQuery.trim()
+
+    if (trimmedQuery === '') {
       document.title = 'Travel Places'
     } else {
-      document.title = `Поиск: ${searchQuery} — Travel Places`
+      document.title = `Поиск: ${trimmedQuery} — Travel Places`
     }
 
     return () => {
@@ -110,7 +112,7 @@ function App() {
       />
 
       <main>
-        <AddPlaceForm onAddPlace={handleAddPlace} />
+        <PlaceForm onAddPlace={handleAddPlace} />
 
         <Section title="Популярные направления">
           {isLoading ? (
