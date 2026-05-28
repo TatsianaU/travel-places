@@ -18,6 +18,7 @@ export default function PlaceList({ places, searchQuery }) {
             country={place.country}
             city={place.city}
             imageUrl={place.imageUrl}
+            visitedYear={place.visitedYear}
           >
             <p className="place-list-note">Добавлено в ваш список желаний</p>
           </PlaceCard>
