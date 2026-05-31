@@ -2,7 +2,7 @@ import './PlaceList.css'
 
 import PlaceCard from '../PlaceCard/PlaceCard'
 
-export default function PlaceList({ places, searchQuery }) {
+export default function PlaceList({ places, searchQuery, onEdit }) {
   return (
     <section className="place-list-section">
       {searchQuery.trim() !== '' && <p className="place-list-count">Найдено мест: {places.length}</p>}
@@ -19,6 +19,7 @@ export default function PlaceList({ places, searchQuery }) {
             city={place.city}
             imageUrl={place.imageUrl}
             visitedYear={place.visitedYear}
+            onEdit={() => onEdit(place)}
           >
             <p className="place-list-note">Добавлено в ваш список желаний</p>
           </PlaceCard>

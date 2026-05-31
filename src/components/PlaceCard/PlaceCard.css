@@ -91,3 +91,24 @@
 .details-button.active:hover {
   background: #4338ca;
 }
+
+.place-card-button {
+  padding: 7px 14px;
+  border: 2px solid #4d5ee0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #5867f0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.place-card-button:hover {
+  background: #eef2ff;
+}
+
+.place-card-button--secondary {
+}

@@ -28,7 +28,6 @@
   align-items: start;
 }
 
-.place-form-field,
 .place-form-field {
   display: flex;
   flex-direction: column;
@@ -62,6 +61,7 @@
     border-color 0.18s ease,
     box-shadow 0.18s ease;
   background: #fafbfd;
+  cursor: pointer;
 }
 
 .place-form-input:focus,
@@ -108,11 +108,11 @@
 .place-form-counter {
   margin-top: 6px;
   font-size: 0.75rem;
-  color: #6b7280; 
+  color: #6b7280;
 }
 
 .place-form-counter--error {
-  color: #dc2626; 
+  color: #dc2626;
 }
 
 .place-form-actions {
@@ -172,6 +172,6 @@
     justify-self: stretch;
   }
   .place-form-actions {
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
   }
 }

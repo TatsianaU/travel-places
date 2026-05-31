@@ -2,7 +2,7 @@ import './App.css'
 
 import { useEffect, useState } from 'react'
 
-import { createPlace, fetchPlaces } from './api/places'
+import { createPlace, fetchPlaces, updatePlace } from './api/places'
 import ClickCounter from './components/ClickCounter/ClickCounter'
 import Clock from './components/Clock/Clock'
 import CountryFilter from './components/CountryFilter/CountryFilter'
@@ -23,6 +23,7 @@ function App() {
   const [isMouseVisible, setIsMouseVisible] = useState(true)
 
   const [placesState, setPlacesState] = useState([])
+  const [editingPlace, setEditingPlace] = useState(undefined)
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -33,6 +34,18 @@ function App() {
       setPlacesState((prev) => [...prev, createdPlace])
     } catch (error) {
       const message = error.message ?? 'Ошибка при добавлении места'
+      setError(message)
+    }
+  }
+
+  async function handleUpdatePlace(id, updatedPlace) {
+    try {
+      const savedPlace = await updatePlace(id, updatedPlace)
+
+      setPlacesState((prev) => prev.map((place) => (place.id === id ? savedPlace : place)))
+    } catch (error) {
+      const message = error.message ?? 'Ошибка при обновлении места'
+
       setError(message)
     }
   }
@@ -112,7 +125,12 @@ function App() {
       />
 
       <main>
-        <PlaceForm onAddPlace={handleAddPlace} />
+        <PlaceForm
+          onAddPlace={handleAddPlace}
+          placeToEdit={editingPlace}
+          onUpdatePlace={handleUpdatePlace}
+          onCancelEdit={() => setEditingPlace(undefined)}
+        />
 
         <Section title="Популярные направления">
           {isLoading ? (
@@ -126,6 +144,7 @@ function App() {
             <PlaceList
               places={filteredPlaces}
               searchQuery={searchQuery}
+              onEdit={setEditingPlace}
             />
           )}
         </Section>
