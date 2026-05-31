@@ -1,52 +1,38 @@
 import './PlaceForm.css'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 
-import validateForm from './validateForm'
+import { placeFormSchema } from './placeFormSchema'
 
-export const INITIAL_FORM_DATA = {
+const INITIAL_FORM_DATA = {
   title: '',
   country: '',
   city: '',
   description: '',
   imageUrl: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop',
+  status: 'planned',
+  visitedYear: undefined,
 }
 
 export default function PlaceForm({ onAddPlace }) {
-  const [formData, setFormData] = useState(INITIAL_FORM_DATA)
-
-  const [errors, setErrors] = useState({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState(null)
 
-  function handleChange(event) {
-    const { name, value } = event.target
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+    control,
+  } = useForm({
+    resolver: zodResolver(placeFormSchema),
+    defaultValues: INITIAL_FORM_DATA,
+  })
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+  const descriptionValue = useWatch({ control, name: 'description' }) ?? ''
 
-    if (errors[name]) {
-      setErrors((prev) => {
-        const next = { ...prev }
-        delete next[name]
-        return next
-      })
-    }
-  }
-
-  async function handleSubmit(event) {
-    event.preventDefault()
-
-    if (isSubmitting) return
-
-    const validationErrors = validateForm(formData)
-    setErrors(validationErrors)
-
-    if (Object.keys(validationErrors).length > 0) return
-
-    setIsSubmitting(true)
+  async function onSubmit(formData) {
     setSubmitError(null)
 
     try {
@@ -57,23 +43,20 @@ export default function PlaceForm({ onAddPlace }) {
 
       await onAddPlace(newPlace)
 
-      setFormData(INITIAL_FORM_DATA)
+      reset(INITIAL_FORM_DATA)
     } catch (err) {
       setSubmitError(err.message ?? 'Ошибка при отправке')
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
   function handleResetForm() {
     if (isSubmitting) return
 
-    setFormData(INITIAL_FORM_DATA)
-    setErrors({})
+    reset(INITIAL_FORM_DATA)
     setSubmitError(null)
   }
 
-  const descriptionLength = formData.description.length
+  const descriptionLength = descriptionValue.length
   const remainingCharacters = 300 - descriptionLength
   const isLimitExceeded = remainingCharacters < 0
   const counterText = isLimitExceeded ? `Превышен лимит на ${Math.abs(remainingCharacters)} символов` : `Осталось ${remainingCharacters} символов`
@@ -84,7 +67,7 @@ export default function PlaceForm({ onAddPlace }) {
       <div className="place-form-card">
         <form
           className="place-form-grid"
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
         >
           <div className="place-form-field">
             <label
@@ -95,12 +78,10 @@ export default function PlaceForm({ onAddPlace }) {
             </label>
             <input
               id="place-title"
-              name="title"
               className="place-form-input"
-              value={formData.title}
-              onChange={handleChange}
+              {...register('title')}
             />
-            {errors.title && <div className="place-form-error">{errors.title}</div>}
+            {errors.title && <div className="place-form-error">{errors.title.message}</div>}
           </div>
 
           <div className="place-form-field">
@@ -112,12 +93,10 @@ export default function PlaceForm({ onAddPlace }) {
             </label>
             <input
               id="place-country"
-              name="country"
               className="place-form-input"
-              value={formData.country}
-              onChange={handleChange}
+              {...register('country')}
             />
-            {errors.country && <div className="place-form-error">{errors.country}</div>}
+            {errors.country && <div className="place-form-error">{errors.country.message}</div>}
           </div>
 
           <div className="place-form-field">
@@ -129,12 +108,45 @@ export default function PlaceForm({ onAddPlace }) {
             </label>
             <input
               id="place-city"
-              name="city"
               className="place-form-input"
-              value={formData.city}
-              onChange={handleChange}
+              {...register('city')}
             />
-            {errors.city && <div className="place-form-error">{errors.city}</div>}
+            {errors.city && <div className="place-form-error">{errors.city.message}</div>}
+          </div>
+
+          <div className="place-form-field">
+            <label
+              className="place-form-label"
+              htmlFor="place-status"
+            >
+              Статус
+            </label>
+            <select
+              id="place-status"
+              className="place-form-input"
+              {...register('status')}
+            >
+              <option value="visited">Посещено</option>
+              <option value="wishlist">В список желаний</option>
+              <option value="planned">Планируется</option>
+            </select>
+            {errors.status && <div className="place-form-error">{errors.status.message}</div>}
+          </div>
+
+          <div className="place-form-field">
+            <label
+              className="place-form-label"
+              htmlFor="place-visited-year"
+            >
+              Год посещения
+            </label>
+            <input
+              id="place-visited-year"
+              type="number"
+              className="place-form-input"
+              {...register('visitedYear', { valueAsNumber: true })}
+            />
+            {errors.visitedYear && <div className="place-form-error">{errors.visitedYear.message}</div>}
           </div>
 
           <div className="place-form-field place-form-field-full">
@@ -146,13 +158,11 @@ export default function PlaceForm({ onAddPlace }) {
             </label>
             <textarea
               id="place-description"
-              name="description"
               className="place-form-input"
-              value={formData.description}
-              onChange={handleChange}
+              {...register('description')}
             />
             <div className={counterClass}>{counterText}</div>
-            {errors.description && <div className="place-form-error">{errors.description}</div>}
+            {errors.description && <div className="place-form-error">{errors.description.message}</div>}
           </div>
 
           <div className="place-form-field place-form-field--full">
@@ -164,12 +174,10 @@ export default function PlaceForm({ onAddPlace }) {
             </label>
             <input
               id="place-image"
-              name="imageUrl"
               className="place-form-input"
-              value={formData.imageUrl}
-              onChange={handleChange}
+              {...register('imageUrl')}
             />
-            {errors.imageUrl && <div className="place-form-error">{errors.imageUrl}</div>}
+            {errors.imageUrl && <div className="place-form-error">{errors.imageUrl.message}</div>}
           </div>
 
           <div className="place-form-field place-form-field--full place-form-actions">

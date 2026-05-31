@@ -2,7 +2,7 @@ import './PlaceCard.css'
 
 import { useState } from 'react'
 
-export default function PlaceCard({ title, description, country, city, imageUrl, children }) {
+export default function PlaceCard({ title, description, country, city, imageUrl, visitedYear, children }) {
   const [showDetails, setShowDetails] = useState(false)
 
   const toggleDetails = () => {
@@ -30,6 +30,8 @@ export default function PlaceCard({ title, description, country, city, imageUrl,
             {showDetails ? 'Hide details' : 'Show details'}
           </button>
         </div>
+
+        {visitedYear && <p className="place-card-visited-year">Посещено в {visitedYear}</p>}
 
         {showDetails && <p className="place-card-description">{description}</p>}
 
