@@ -15,7 +15,7 @@ body {
   flex-direction: column;
 }
 
-.app main {
+.app__content {
   flex: 1;
   background: #f5f5f7;
 }
