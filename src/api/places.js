@@ -28,6 +28,22 @@ export async function createPlace(place) {
   return response.json()
 }
 
+export async function updatePlace(id, updatedPlace) {
+  const response = await fetch(`${PLACES_URL}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updatedPlace),
+  })
+
+  if (!response.ok) {
+    throw new Error('Не удалось обновить место')
+  }
+
+  return response.json()
+}
+
 export async function deletePlace(id) {
   const response = await fetch(`${PLACES_URL}/${id}`, {
     method: 'DELETE',

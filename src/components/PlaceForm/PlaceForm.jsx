@@ -1,7 +1,7 @@
 import './PlaceForm.css'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 
 import { placeFormSchema } from './placeFormSchema'
@@ -16,8 +16,9 @@ const INITIAL_FORM_DATA = {
   visitedYear: undefined,
 }
 
-export default function PlaceForm({ onAddPlace }) {
+export default function PlaceForm({ onAddPlace, placeToEdit, onUpdatePlace, onCancelEdit }) {
   const [submitError, setSubmitError] = useState(null)
+  const isEditing = placeToEdit !== undefined
 
   const {
     register,
@@ -27,10 +28,28 @@ export default function PlaceForm({ onAddPlace }) {
     control,
   } = useForm({
     resolver: zodResolver(placeFormSchema),
-    defaultValues: INITIAL_FORM_DATA,
+    defaultValues: placeToEdit ?? INITIAL_FORM_DATA,
   })
 
+  useEffect(() => {
+    if (!placeToEdit) return
+
+    reset({
+      title: placeToEdit.title,
+      country: placeToEdit.country,
+      city: placeToEdit.city ?? '',
+      description: placeToEdit.description,
+      imageUrl: placeToEdit.imageUrl,
+      status: placeToEdit.status,
+      visitedYear: placeToEdit.visitedYear,
+    })
+  }, [placeToEdit, reset])
+
   const descriptionValue = useWatch({ control, name: 'description' }) ?? ''
+  const statusValue = useWatch({
+    control,
+    name: 'status',
+  })
 
   async function onSubmit(formData) {
     setSubmitError(null)
@@ -41,9 +60,17 @@ export default function PlaceForm({ onAddPlace }) {
         city: formData.city.trim(),
       }
 
-      await onAddPlace(newPlace)
+      if (isEditing) {
+        await onUpdatePlace(placeToEdit.id, newPlace)
 
-      reset(INITIAL_FORM_DATA)
+        onCancelEdit()
+
+        reset(INITIAL_FORM_DATA)
+      } else {
+        await onAddPlace(newPlace)
+
+        reset(INITIAL_FORM_DATA)
+      }
     } catch (err) {
       setSubmitError(err.message ?? 'Ошибка при отправке')
     }
@@ -65,6 +92,7 @@ export default function PlaceForm({ onAddPlace }) {
   return (
     <div className="place-form">
       <div className="place-form-card">
+        <h2 className="place-form-title">{isEditing ? 'Редактировать место' : 'Добавить новое место'}</h2>
         <form
           className="place-form-grid"
           onSubmit={handleSubmit(onSubmit)}
@@ -133,21 +161,23 @@ export default function PlaceForm({ onAddPlace }) {
             {errors.status && <div className="place-form-error">{errors.status.message}</div>}
           </div>
 
-          <div className="place-form-field">
-            <label
-              className="place-form-label"
-              htmlFor="place-visited-year"
-            >
-              Год посещения
-            </label>
-            <input
-              id="place-visited-year"
-              type="number"
-              className="place-form-input"
-              {...register('visitedYear', { valueAsNumber: true })}
-            />
-            {errors.visitedYear && <div className="place-form-error">{errors.visitedYear.message}</div>}
-          </div>
+          {statusValue === 'visited' && (
+            <div className="place-form-field">
+              <label
+                className="place-form-label"
+                htmlFor="place-visited-year"
+              >
+                Год посещения
+              </label>
+              <input
+                id="place-visited-year"
+                type="number"
+                className="place-form-input"
+                {...register('visitedYear', { valueAsNumber: true })}
+              />
+              {errors.visitedYear && <div className="place-form-error">{errors.visitedYear.message}</div>}
+            </div>
+          )}
 
           <div className="place-form-field place-form-field-full">
             <label
@@ -158,7 +188,7 @@ export default function PlaceForm({ onAddPlace }) {
             </label>
             <textarea
               id="place-description"
-              className="place-form-input"
+              className="place-form-textarea"
               {...register('description')}
             />
             <div className={counterClass}>{counterText}</div>
@@ -186,16 +216,31 @@ export default function PlaceForm({ onAddPlace }) {
               type="submit"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Добавление...' : 'Добавить'}
+              {isSubmitting ? (isEditing ? 'Сохранение...' : 'Добавление...') : isEditing ? 'Сохранить' : 'Добавить'}
             </button>
-            <button
-              className="place-form-button place-form-button--secondary"
-              type="button"
-              disabled={isSubmitting}
-              onClick={handleResetForm}
-            >
-              Очистить
-            </button>
+            {isEditing && (
+              <button
+                className="place-form-button place-form-button--secondary"
+                type="button"
+                onClick={() => {
+                  onCancelEdit()
+                  reset(INITIAL_FORM_DATA)
+                }}
+              >
+                Отмена
+              </button>
+            )}
+
+            {!isEditing && (
+              <button
+                className="place-form-button place-form-button--secondary"
+                type="button"
+                disabled={isSubmitting}
+                onClick={handleResetForm}
+              >
+                Очистить
+              </button>
+            )}
           </div>
           {submitError && <div className="place-form-error place-form-submit-error">{submitError}</div>}
         </form>

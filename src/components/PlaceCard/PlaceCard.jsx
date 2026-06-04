@@ -2,7 +2,7 @@ import './PlaceCard.css'
 
 import { useState } from 'react'
 
-export default function PlaceCard({ title, description, country, city, imageUrl, visitedYear, children }) {
+export default function PlaceCard({ title, description, country, city, imageUrl, visitedYear, children, onEdit }) {
   const [showDetails, setShowDetails] = useState(false)
 
   const toggleDetails = () => {
@@ -29,6 +29,15 @@ export default function PlaceCard({ title, description, country, city, imageUrl,
           >
             {showDetails ? 'Hide details' : 'Show details'}
           </button>
+          {onEdit && (
+            <button
+              className="place-card-button place-card-button--secondary"
+              type="button"
+              onClick={onEdit}
+            >
+              Edit
+            </button>
+          )}
         </div>
 
         {visitedYear && <p className="place-card-visited-year">Посещено в {visitedYear}</p>}
