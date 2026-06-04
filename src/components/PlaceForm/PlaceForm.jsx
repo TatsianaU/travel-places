@@ -230,14 +230,17 @@ export default function PlaceForm({ onAddPlace, placeToEdit, onUpdatePlace, onCa
                 Отмена
               </button>
             )}
-            <button
-              className="place-form-button place-form-button--secondary"
-              type="button"
-              disabled={isSubmitting}
-              onClick={handleResetForm}
-            >
-              Очистить
-            </button>
+
+            {!isEditing && (
+              <button
+                className="place-form-button place-form-button--secondary"
+                type="button"
+                disabled={isSubmitting}
+                onClick={handleResetForm}
+              >
+                Очистить
+              </button>
+            )}
           </div>
           {submitError && <div className="place-form-error place-form-submit-error">{submitError}</div>}
         </form>
