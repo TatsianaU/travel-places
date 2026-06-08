@@ -1,8 +1,9 @@
 import './PlaceCard.css'
 
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
-export default function PlaceCard({ title, description, country, city, imageUrl, visitedYear, children, onEdit }) {
+export default function PlaceCard({ id, title, description, country, city, imageUrl, visitedYear, children, onEdit }) {
   const [showDetails, setShowDetails] = useState(false)
 
   const toggleDetails = () => {
@@ -18,7 +19,7 @@ export default function PlaceCard({ title, description, country, city, imageUrl,
       />
 
       <div className="place-card-content">
-        <h2 className="place-card-title">{title}</h2>
+        <h2 className="place-card-title">{id ? <Link to={`/places/${id}`}>{title}</Link> : title}</h2>
 
         <div className="place-card-actions">
           <span className="place-card-country">{city ? `${country} — ${city}` : country}</span>

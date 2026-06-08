@@ -13,6 +13,7 @@ export default function PlaceList({ places, searchQuery, onEdit }) {
         {places.map((place) => (
           <PlaceCard
             key={place.id}
+            id={place.id}
             title={place.title}
             description={place.description}
             country={place.country}

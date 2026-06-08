@@ -5,6 +5,7 @@ import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import HomePage from './pages/HomePage/HomePage'
 import PlacesPage from './pages/PlacesPage/PlacesPage'
+import PlaceDetailsPage from './pages/PlaceDetailsPage/PlaceDetailsPage'
 import AboutPage from './pages/AboutPage/AboutPage'
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage'
 
@@ -22,6 +23,10 @@ function App() {
           <Route
             path="/places"
             element={<PlacesPage />}
+          />
+          <Route
+            path="/places/:id"
+            element={<PlaceDetailsPage />}
           />
           <Route
             path="/about"
