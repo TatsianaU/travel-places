@@ -12,6 +12,20 @@ export async function fetchPlaces() {
   return response.json()
 }
 
+export async function fetchPlace(id) {
+  const response = await fetch(`${PLACES_URL}/${id}`)
+
+  if (response.status === 404) {
+    return null
+  }
+
+  if (!response.ok) {
+    throw new Error('Не удалось загрузить место')
+  }
+
+  return response.json()
+}
+
 export async function createPlace(place) {
   const response = await fetch(PLACES_URL, {
     method: 'POST',

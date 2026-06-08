@@ -1,29 +1,39 @@
 import './Header.css'
 
+import { NavLink } from 'react-router-dom'
 import React from 'react'
 
-// Пример без JSX. JSX -> вызов метода createElement
-// export default function Header() {
-//   return React.createElement(
-//     'header',
-//     { className: 'header' },
-//     React.createElement('h1', { className: 'header-title' }, 'Travel Places'),
-//     React.createElement('p', { className: 'header-subtitle' }, 'Откройте для себя удивительные места по всему миру')
-//   )
-// }
-
-// Вариант 1
 export default function Header() {
   return (
-    <header
-      className="header"
-      // style={{ color: 'red' }}
-    >
-      <h1 className="header-title">Travel Places</h1>
-      <p className="header-subtitle">Откройте для себя удивительные места по всему миру</p>
+    <header className="header">
+      <div className="header-top">
+        <div>
+          <h1 className="header-title">Travel Places</h1>
+          <p className="header-subtitle">Откройте для себя удивительные места по всему миру</p>
+        </div>
+
+        <nav className="header-nav">
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) => `header-link ${isActive ? 'active' : ''}`}
+          >
+            Главная
+          </NavLink>
+          <NavLink
+            to="/places"
+            className={({ isActive }) => `header-link ${isActive ? 'active' : ''}`}
+          >
+            Места
+          </NavLink>
+          <NavLink
+            to="/about"
+            className={({ isActive }) => `header-link ${isActive ? 'active' : ''}`}
+          >
+            О проекте
+          </NavLink>
+        </nav>
+      </div>
     </header>
   )
 }
-
-// Вариант 2
-// export default Header

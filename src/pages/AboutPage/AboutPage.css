@@ -1,0 +1,28 @@
+.about-page {
+  padding: 64px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 220px);
+}
+
+.about-page__box {
+  max-width: 760px;
+  background: white;
+  padding: 42px 36px;
+  border-radius: 24px;
+  box-shadow: 0 18px 60px rgba(39, 67, 109, 0.1);
+}
+
+.about-page__title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 24px;
+  color: #1f2937;
+}
+
+.about-page__text {
+  margin: 0 0 18px;
+  line-height: 1.9;
+  color: #475569;
+  white-space: pre-line;
+}
