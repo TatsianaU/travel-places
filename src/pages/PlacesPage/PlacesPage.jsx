@@ -1,15 +1,15 @@
 import './PlacesPage.css'
 
 import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
-import { createPlace, fetchPlaces, updatePlace } from '../../api/places'
+import { fetchPlaces } from '../../api/places'
 import ClickCounter from '../../components/ClickCounter/ClickCounter'
 import Clock from '../../components/Clock/Clock'
 import CountryFilter from '../../components/CountryFilter/CountryFilter'
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage'
 import Greeting from '../../components/Greeting/Greeting'
 import MousePosition from '../../components/MousePosition/MousePosition'
-import PlaceForm from '../../components/PlaceForm/PlaceForm'
 import PlaceList from '../../components/PlaceList/PlaceList'
 import SearchFilter from '../../components/SearchFilter/SearchFilter'
 import Section from '../../components/Section/Section'
@@ -21,30 +21,10 @@ export default function PlacesPage() {
   const [isMouseVisible, setIsMouseVisible] = useState(true)
 
   const [placesState, setPlacesState] = useState([])
-  const [editingPlace, setEditingPlace] = useState(undefined)
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
-
-  async function handleAddPlace(newPlace) {
-    try {
-      const createdPlace = await createPlace(newPlace)
-      setPlacesState((prev) => [...prev, createdPlace])
-    } catch (error) {
-      const message = error.message ?? 'Ошибка при добавлении места'
-      setError(message)
-    }
-  }
-
-  async function handleUpdatePlace(id, updatedPlace) {
-    try {
-      const savedPlace = await updatePlace(id, updatedPlace)
-      setPlacesState((prev) => prev.map((place) => (place.id === id ? savedPlace : place)))
-    } catch (error) {
-      const message = error.message ?? 'Ошибка при обновлении места'
-      setError(message)
-    }
-  }
+  const navigate = useNavigate()
 
   async function loadPlaces() {
     setIsLoading(true)
@@ -117,12 +97,14 @@ export default function PlacesPage() {
       />
 
       <main>
-        <PlaceForm
-          onAddPlace={handleAddPlace}
-          placeToEdit={editingPlace}
-          onUpdatePlace={handleUpdatePlace}
-          onCancelEdit={() => setEditingPlace(undefined)}
-        />
+        <div className="places-page-actions">
+          <Link
+            to="/places/new"
+            className="places-page-add-link"
+          >
+            Добавить место
+          </Link>
+        </div>
 
         <Section title="Популярные направления">
           {isLoading ? (
@@ -136,7 +118,7 @@ export default function PlacesPage() {
             <PlaceList
               places={filteredPlaces}
               searchQuery={searchQuery}
-              onEdit={setEditingPlace}
+              onEdit={(place) => navigate(`/places/${place.id}/edit`)}
             />
           )}
         </Section>
