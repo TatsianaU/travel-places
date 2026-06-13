@@ -82,8 +82,6 @@ export default function PlacesPage() {
     activeFilters.push('Только избранное')
   }
 
-  // При сбросе сохраняем текущий режим отображения,
-  // чтобы пользователь не терял выбранный вид списка.
   function handleResetFilters() {
     const nextParams = new URLSearchParams()
 
