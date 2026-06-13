@@ -1,0 +1,36 @@
+.place-table-wrapper {
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+.place-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+.place-table th,
+.place-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.place-table th {
+  background: #f8fafc;
+  color: #1f2937;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.place-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.place-table-empty {
+  padding: 18px;
+  background: #f8f9ff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  color: #475569;
+}

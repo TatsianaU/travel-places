@@ -15,6 +15,8 @@ import PlaceList from '../../components/PlaceList/PlaceList'
 import SearchFilter from '../../components/SearchFilter/SearchFilter'
 import Section from '../../components/Section/Section'
 import Spinner from '../../components/Spinner/Spinner'
+import ViewSwitcher from '../../components/ViewSwitcher/ViewSwitcher'
+import PlaceTable from '../../components/PlaceTable/PlaceTable'
 
 export default function PlacesPage() {
   const [selectedCountry, setSelectedCountry] = useState('All')
@@ -32,8 +34,16 @@ export default function PlacesPage() {
   const status = searchParams.get('status') ?? ''
   const favorites = searchParams.get('favorites') ?? ''
   const sort = searchParams.get('sort') ?? ''
-  const view = searchParams.get('view') ?? 'cards'
-  const hasActiveFilters = search.trim() !== '' || status !== '' || favorites !== '' || selectedCountry !== 'All'
+  const view = searchParams.get('view') ?? ''
+
+  const ALLOWED_SORTS = ['title', 'country']
+  const ALLOWED_VIEWS = ['cards', 'table']
+  const DEFAULT_VIEW = 'cards'
+
+  const sortValue = ALLOWED_SORTS.includes(sort) ? sort : ''
+  const viewValue = ALLOWED_VIEWS.includes(view) ? view : DEFAULT_VIEW
+  const hasActiveFilters =
+    search.trim() !== '' || status !== '' || favorites !== '' || selectedCountry !== 'All' || sortValue !== '' || viewValue !== DEFAULT_VIEW
 
   const statusLabelMap = {
     visited: 'Посещено',
@@ -53,6 +63,24 @@ export default function PlacesPage() {
 
   if (status) {
     activeFilters.push(`Статус: ${statusLabelMap[status] ?? status}`)
+  }
+
+  const sortLabelMap = {
+    title: 'По названию',
+    country: 'По стране',
+  }
+
+  const viewLabelMap = {
+    cards: 'Карточки',
+    table: 'Таблица',
+  }
+
+  if (sortValue) {
+    activeFilters.push(sortLabelMap[sortValue])
+  }
+
+  if (viewValue !== DEFAULT_VIEW) {
+    activeFilters.push(viewLabelMap[viewValue])
   }
 
   if (favorites) {
@@ -146,6 +174,8 @@ export default function PlacesPage() {
       return wishlistIds.includes(place.id)
     })
 
+  const sortedPlaces = sortValue ? [...filteredPlaces].sort((a, b) => a[sortValue].localeCompare(b[sortValue], 'ru')) : filteredPlaces
+
   return (
     <div className="places-page">
       <Greeting name="Татьяна" />
@@ -172,29 +202,49 @@ export default function PlacesPage() {
         onCountryChange={setSelectedCountry}
       />
 
-      <div className="status-filter">
-        <label htmlFor="status-select">Статус</label>
-        <select
-          id="status-select"
-          value={status}
-          onChange={(event) => updateParam('status', event.target.value)}
-        >
-          <option value="">Все</option>
-          <option value="visited">Посещено</option>
-          <option value="planned">Планируется</option>
-          <option value="wishlist">В список желаний</option>
-        </select>
-      </div>
+      <div className="places-page-controls">
+        <div className="status-filter">
+          <label htmlFor="status-select">Статус</label>
+          <select
+            id="status-select"
+            value={status}
+            onChange={(event) => updateParam('status', event.target.value)}
+          >
+            <option value="">Все</option>
+            <option value="visited">Посещено</option>
+            <option value="planned">Планируется</option>
+            <option value="wishlist">В список желаний</option>
+          </select>
+        </div>
 
-      <div className="favorites-filter">
-        <label>
-          <input
-            type="checkbox"
-            checked={favorites !== ''}
-            onChange={handleToggleFavorites}
-          />
-          Только избранное
-        </label>
+        <div className="sort-filter">
+          <label htmlFor="sort-select">Сортировка</label>
+          <select
+            id="sort-select"
+            value={sortValue}
+            onChange={(event) => updateParam('sort', event.target.value)}
+          >
+            <option value="">По умолчанию</option>
+            <option value="title">По названию</option>
+            <option value="country">По стране</option>
+          </select>
+        </div>
+
+        <ViewSwitcher
+          value={viewValue}
+          onChange={(next) => updateParam('view', next === DEFAULT_VIEW ? '' : next)}
+        />
+
+        <div className="favorites-filter">
+          <label>
+            <input
+              type="checkbox"
+              checked={favorites !== ''}
+              onChange={handleToggleFavorites}
+            />
+            Только избранное
+          </label>
+        </div>
       </div>
 
       {hasActiveFilters && (
@@ -221,9 +271,11 @@ export default function PlacesPage() {
               message={error}
               onRetry={loadPlaces}
             />
+          ) : viewValue === 'table' ? (
+            <PlaceTable places={sortedPlaces} />
           ) : (
             <PlaceList
-              places={filteredPlaces}
+              places={sortedPlaces}
               searchQuery={search}
               onEdit={(place) => navigate(`/places/${place.id}/edit`)}
               wishlistIds={wishlistIds}

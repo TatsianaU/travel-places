@@ -36,29 +36,52 @@
   margin: 24px 0;
 }
 
+.places-page-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  margin: 16px 0;
+}
+
 .status-filter,
+.sort-filter,
 .favorites-filter {
-  margin: 16px 0 0;
+  margin: 0;
   font-size: 0.95rem;
 }
 
-.status-filter {
+.status-filter,
+.sort-filter {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.status-filter label {
+.status-filter label,
+.sort-filter label {
   font-weight: 600;
 }
 
-.status-filter select {
+.status-filter select,
+.sort-filter select {
   padding: 8px 10px;
   border-radius: 8px;
   border: 1px solid #d1d5db;
   background: white;
   color: #1f2937;
   cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.status-filter select:hover,
+.sort-filter select:hover {
+  border-color: #a5b4fc;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+  background-color: #f8fbff;
 }
 
 .favorites-filter label {
