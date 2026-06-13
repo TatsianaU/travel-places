@@ -1,7 +1,7 @@
 import './PlacesPage.css'
 
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
 import { fetchPlaces } from '../../api/places'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
@@ -21,6 +21,7 @@ export default function PlacesPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isMouseVisible, setIsMouseVisible] = useState(true)
   const [wishlistIds, setWishlistIds] = useLocalStorage('wishlistIds', [])
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const [placesState, setPlacesState] = useState([])
 
@@ -61,6 +62,29 @@ export default function PlacesPage() {
   }, [searchQuery])
 
   const countries = [...new Set(placesState.map((place) => place.country))]
+  const favorites = searchParams.get('favorites') ?? ''
+  const hasActiveFilters = searchQuery.trim() !== '' || favorites !== ''
+
+  function updateParam(key, value) {
+    const nextParams = new URLSearchParams(searchParams)
+
+    if (value) {
+      nextParams.set(key, value)
+    } else {
+      nextParams.delete(key)
+    }
+
+    setSearchParams(nextParams)
+  }
+
+  function handleToggleFavorites() {
+    if (favorites) {
+      updateParam('favorites', '')
+      return
+    }
+
+    updateParam('favorites', '1')
+  }
 
   function handleToggleWishlist(id) {
     setWishlistIds((prev) => {
@@ -81,6 +105,13 @@ export default function PlacesPage() {
         place.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         place.country.toLowerCase().includes(searchQuery.toLowerCase())
     )
+    .filter((place) => {
+      if (!favorites) {
+        return true
+      }
+
+      return wishlistIds.includes(place.id)
+    })
 
   return (
     <div className="places-page">
@@ -107,6 +138,17 @@ export default function PlacesPage() {
         selectedCountry={selectedCountry}
         onCountryChange={setSelectedCountry}
       />
+
+      <div className="favorites-filter">
+        <label>
+          <input
+            type="checkbox"
+            checked={favorites !== ''}
+            onChange={handleToggleFavorites}
+          />
+          Только избранное
+        </label>
+      </div>
 
       <main>
         <div className="places-page-actions">
