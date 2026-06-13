@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { fetchPlaces } from '../../api/places'
+import { useLocalStorage } from '../../hooks/useLocalStorage'
 import ClickCounter from '../../components/ClickCounter/ClickCounter'
 import Clock from '../../components/Clock/Clock'
 import CountryFilter from '../../components/CountryFilter/CountryFilter'
@@ -19,6 +20,7 @@ export default function PlacesPage() {
   const [selectedCountry, setSelectedCountry] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
   const [isMouseVisible, setIsMouseVisible] = useState(true)
+  const [wishlistIds, setWishlistIds] = useLocalStorage('wishlistIds', [])
 
   const [placesState, setPlacesState] = useState([])
 
@@ -59,6 +61,16 @@ export default function PlacesPage() {
   }, [searchQuery])
 
   const countries = [...new Set(placesState.map((place) => place.country))]
+
+  function handleToggleWishlist(id) {
+    setWishlistIds((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((wishlistId) => wishlistId !== id)
+      }
+
+      return [...prev, id]
+    })
+  }
 
   const filteredPlaces = placesState
     .filter((place) => selectedCountry === 'All' || place.country === selectedCountry)
@@ -119,6 +131,8 @@ export default function PlacesPage() {
               places={filteredPlaces}
               searchQuery={searchQuery}
               onEdit={(place) => navigate(`/places/${place.id}/edit`)}
+              wishlistIds={wishlistIds}
+              onToggleWishlist={handleToggleWishlist}
             />
           )}
         </Section>

@@ -3,7 +3,19 @@ import './PlaceCard.css'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-export default function PlaceCard({ id, title, description, country, city, imageUrl, visitedYear, children, onEdit }) {
+export default function PlaceCard({
+  id,
+  title,
+  description,
+  country,
+  city,
+  imageUrl,
+  visitedYear,
+  children,
+  onEdit,
+  isInWishlist,
+  onToggleWishlist,
+}) {
   const [showDetails, setShowDetails] = useState(false)
 
   const toggleDetails = () => {
@@ -30,6 +42,18 @@ export default function PlaceCard({ id, title, description, country, city, image
           >
             {showDetails ? 'Hide details' : 'Show details'}
           </button>
+
+          {onToggleWishlist && (
+            <button
+              className={`place-card-button ${isInWishlist ? 'place-card-button--active' : ''}`}
+              type="button"
+              onClick={onToggleWishlist}
+              title={isInWishlist ? 'Убрать из избранного' : 'Добавить в избранное'}
+            >
+              {isInWishlist ? '❤️ Убрать из избранного' : '🤍 В избранное'}
+            </button>
+          )}
+
           {onEdit && (
             <button
               className="place-card-button place-card-button--secondary"
