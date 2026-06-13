@@ -42,8 +42,7 @@ export default function PlacesPage() {
 
   const sortValue = ALLOWED_SORTS.includes(sort) ? sort : ''
   const viewValue = ALLOWED_VIEWS.includes(view) ? view : DEFAULT_VIEW
-  const hasActiveFilters =
-    search.trim() !== '' || status !== '' || favorites !== '' || selectedCountry !== 'All' || sortValue !== '' || viewValue !== DEFAULT_VIEW
+  const hasActiveFilters = search.trim() !== '' || status !== '' || favorites !== '' || selectedCountry !== 'All' || sortValue !== ''
 
   const statusLabelMap = {
     visited: 'Посещено',
@@ -79,12 +78,21 @@ export default function PlacesPage() {
     activeFilters.push(sortLabelMap[sortValue])
   }
 
-  if (viewValue !== DEFAULT_VIEW) {
-    activeFilters.push(viewLabelMap[viewValue])
-  }
-
   if (favorites) {
     activeFilters.push('Только избранное')
+  }
+
+  // При сбросе сохраняем текущий режим отображения,
+  // чтобы пользователь не терял выбранный вид списка.
+  function handleResetFilters() {
+    const nextParams = new URLSearchParams()
+
+    if (viewValue !== DEFAULT_VIEW) {
+      nextParams.set('view', viewValue)
+    }
+
+    setSearchParams(nextParams)
+    setSelectedCountry('All')
   }
 
   async function loadPlaces() {
@@ -248,8 +256,16 @@ export default function PlacesPage() {
       </div>
 
       {hasActiveFilters && (
-        <div className="active-filters">
-          <strong>Активные фильтры:</strong> {activeFilters.join(', ')}
+        <div className="active-filters-section">
+          <div className="active-filters">
+            <strong>Активные фильтры:</strong> {activeFilters.join(', ')}
+          </div>
+          <button
+            className="reset-filters-button"
+            onClick={handleResetFilters}
+          >
+            Сбросить фильтры
+          </button>
         </div>
       )}
 
