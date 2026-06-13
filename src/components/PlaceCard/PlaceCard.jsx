@@ -2,6 +2,22 @@ import './PlaceCard.css'
 
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Calendar, CheckCircle, Star, Heart } from 'lucide-react'
+
+const STATUS_CONFIG = {
+  visited: {
+    icon: CheckCircle,
+    label: 'Посещено',
+  },
+  planned: {
+    icon: Calendar,
+    label: 'Планируется',
+  },
+  wishlist: {
+    icon: Star,
+    label: 'В список желаний',
+  },
+}
 
 export default function PlaceCard({
   id,
@@ -10,6 +26,7 @@ export default function PlaceCard({
   country,
   city,
   imageUrl,
+  status,
   visitedYear,
   children,
   onEdit,
@@ -21,6 +38,9 @@ export default function PlaceCard({
   const toggleDetails = () => {
     setShowDetails(!showDetails)
   }
+
+  const statusConfig = status ? STATUS_CONFIG[status] : null
+  const StatusIcon = statusConfig?.icon
 
   return (
     <div className="place-card">
@@ -65,7 +85,23 @@ export default function PlaceCard({
           )}
         </div>
 
-        {visitedYear && <p className="place-card-visited-year">Посещено в {visitedYear}</p>}
+        <div className="place-card-badges">
+          {statusConfig && (
+            <span className={`place-card-status place-card-status--${status}`}>
+              <StatusIcon size={14} />
+              {statusConfig.label}
+            </span>
+          )}
+
+          {isInWishlist && (
+            <span className="place-card-favorite">
+              <Heart size={14} />
+              Избранное
+            </span>
+          )}
+        </div>
+
+        {status === 'visited' && visitedYear && <p className="place-card-visited-year">Посещено в {visitedYear}</p>}
 
         {showDetails && <p className="place-card-description">{description}</p>}
 

@@ -36,9 +36,29 @@
   margin: 24px 0;
 }
 
+.status-filter,
 .favorites-filter {
   margin: 16px 0 0;
   font-size: 0.95rem;
+}
+
+.status-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-filter label {
+  font-weight: 600;
+}
+
+.status-filter select {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #1f2937;
+  cursor: pointer;
 }
 
 .favorites-filter label {

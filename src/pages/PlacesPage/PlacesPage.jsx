@@ -29,10 +29,17 @@ export default function PlacesPage() {
   const navigate = useNavigate()
   const countries = [...new Set(placesState.map((place) => place.country))]
   const search = searchParams.get('search') ?? ''
+  const status = searchParams.get('status') ?? ''
   const favorites = searchParams.get('favorites') ?? ''
   const sort = searchParams.get('sort') ?? ''
   const view = searchParams.get('view') ?? 'cards'
-  const hasActiveFilters = search.trim() !== '' || favorites !== '' || selectedCountry !== 'All'
+  const hasActiveFilters = search.trim() !== '' || status !== '' || favorites !== '' || selectedCountry !== 'All'
+
+  const statusLabelMap = {
+    visited: 'Посещено',
+    planned: 'Планируется',
+    wishlist: 'В список желаний',
+  }
 
   const activeFilters = []
 
@@ -42,6 +49,10 @@ export default function PlacesPage() {
 
   if (selectedCountry !== 'All') {
     activeFilters.push(`Страна: ${selectedCountry}`)
+  }
+
+  if (status) {
+    activeFilters.push(`Статус: ${statusLabelMap[status] ?? status}`)
   }
 
   if (favorites) {
@@ -121,6 +132,13 @@ export default function PlacesPage() {
         place.country.toLowerCase().includes(search.toLowerCase())
     )
     .filter((place) => {
+      if (!status) {
+        return true
+      }
+
+      return place.status === status
+    })
+    .filter((place) => {
       if (!favorites) {
         return true
       }
@@ -153,6 +171,20 @@ export default function PlacesPage() {
         selectedCountry={selectedCountry}
         onCountryChange={setSelectedCountry}
       />
+
+      <div className="status-filter">
+        <label htmlFor="status-select">Статус</label>
+        <select
+          id="status-select"
+          value={status}
+          onChange={(event) => updateParam('status', event.target.value)}
+        >
+          <option value="">Все</option>
+          <option value="visited">Посещено</option>
+          <option value="planned">Планируется</option>
+          <option value="wishlist">В список желаний</option>
+        </select>
+      </div>
 
       <div className="favorites-filter">
         <label>

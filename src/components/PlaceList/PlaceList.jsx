@@ -19,6 +19,7 @@ export default function PlaceList({ places, searchQuery, onEdit, wishlistIds, on
             country={place.country}
             city={place.city}
             imageUrl={place.imageUrl}
+            status={place.status}
             visitedYear={place.visitedYear}
             onEdit={() => onEdit(place)}
             isInWishlist={wishlistIds.includes(place.id)}
