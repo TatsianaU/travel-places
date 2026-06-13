@@ -23,11 +23,7 @@ export default function PlaceList({ places, searchQuery, onEdit, wishlistIds, on
             onEdit={() => onEdit(place)}
             isInWishlist={wishlistIds.includes(place.id)}
             onToggleWishlist={() => onToggleWishlist(place.id)}
-          >
-            {wishlistIds.includes(place.id) && (
-              <p className="place-list-note">❤️ Добавлено в ваш список желаний</p>
-            )}
-          </PlaceCard>
+          />
         ))}
       </div>
     </section>
