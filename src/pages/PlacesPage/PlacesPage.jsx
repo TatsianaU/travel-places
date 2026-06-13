@@ -18,7 +18,6 @@ import Spinner from '../../components/Spinner/Spinner'
 
 export default function PlacesPage() {
   const [selectedCountry, setSelectedCountry] = useState('All')
-  const [searchQuery, setSearchQuery] = useState('')
   const [isMouseVisible, setIsMouseVisible] = useState(true)
   const [wishlistIds, setWishlistIds] = useLocalStorage('wishlistIds', [])
   const [searchParams, setSearchParams] = useSearchParams()
@@ -28,6 +27,26 @@ export default function PlacesPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const navigate = useNavigate()
+  const countries = [...new Set(placesState.map((place) => place.country))]
+  const search = searchParams.get('search') ?? ''
+  const favorites = searchParams.get('favorites') ?? ''
+  const sort = searchParams.get('sort') ?? ''
+  const view = searchParams.get('view') ?? 'cards'
+  const hasActiveFilters = search.trim() !== '' || favorites !== '' || selectedCountry !== 'All'
+
+  const activeFilters = []
+
+  if (search.trim() !== '') {
+    activeFilters.push(`Поиск: "${search}"`)
+  }
+
+  if (selectedCountry !== 'All') {
+    activeFilters.push(`Страна: ${selectedCountry}`)
+  }
+
+  if (favorites) {
+    activeFilters.push('Только избранное')
+  }
 
   async function loadPlaces() {
     setIsLoading(true)
@@ -48,22 +67,18 @@ export default function PlacesPage() {
   }, [])
 
   useEffect(() => {
-    const trimmedQuery = searchQuery.trim()
+    const trimmedSearch = search.trim()
 
-    if (trimmedQuery === '') {
+    if (trimmedSearch === '') {
       document.title = 'Travel Places'
     } else {
-      document.title = `Поиск: ${trimmedQuery} — Travel Places`
+      document.title = `Поиск: ${trimmedSearch} — Travel Places`
     }
 
     return () => {
       document.title = 'Travel Places'
     }
-  }, [searchQuery])
-
-  const countries = [...new Set(placesState.map((place) => place.country))]
-  const favorites = searchParams.get('favorites') ?? ''
-  const hasActiveFilters = searchQuery.trim() !== '' || favorites !== ''
+  }, [search])
 
   function updateParam(key, value) {
     const nextParams = new URLSearchParams(searchParams)
@@ -100,10 +115,10 @@ export default function PlacesPage() {
     .filter((place) => selectedCountry === 'All' || place.country === selectedCountry)
     .filter(
       (place) =>
-        searchQuery.trim() === '' ||
-        place.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        place.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        place.country.toLowerCase().includes(searchQuery.toLowerCase())
+        search.trim() === '' ||
+        place.title.toLowerCase().includes(search.toLowerCase()) ||
+        place.description.toLowerCase().includes(search.toLowerCase()) ||
+        place.country.toLowerCase().includes(search.toLowerCase())
     )
     .filter((place) => {
       if (!favorites) {
@@ -129,8 +144,8 @@ export default function PlacesPage() {
       {isMouseVisible && <MousePosition />}
 
       <SearchFilter
-        query={searchQuery}
-        onQueryChange={setSearchQuery}
+        query={search}
+        onQueryChange={(value) => updateParam('search', value)}
       />
 
       <CountryFilter
@@ -149,6 +164,12 @@ export default function PlacesPage() {
           Только избранное
         </label>
       </div>
+
+      {hasActiveFilters && (
+        <div className="active-filters">
+          <strong>Активные фильтры:</strong> {activeFilters.join(', ')}
+        </div>
+      )}
 
       <main>
         <div className="places-page-actions">
@@ -171,7 +192,7 @@ export default function PlacesPage() {
           ) : (
             <PlaceList
               places={filteredPlaces}
-              searchQuery={searchQuery}
+              searchQuery={search}
               onEdit={(place) => navigate(`/places/${place.id}/edit`)}
               wishlistIds={wishlistIds}
               onToggleWishlist={handleToggleWishlist}
