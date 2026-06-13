@@ -62,10 +62,6 @@ export default function PlaceForm({ onAddPlace, placeToEdit, onUpdatePlace, onCa
 
       if (isEditing) {
         await onUpdatePlace(placeToEdit.id, newPlace)
-
-        onCancelEdit()
-
-        reset(INITIAL_FORM_DATA)
       } else {
         await onAddPlace(newPlace)
 

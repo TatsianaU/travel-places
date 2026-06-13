@@ -1,9 +1,9 @@
 import './PlaceDetailsPage.css'
 
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 
-import { fetchPlace } from '../../api/places'
+import { fetchPlace, deletePlace } from '../../api/places'
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage'
 import Spinner from '../../components/Spinner/Spinner'
 
@@ -13,6 +13,7 @@ export default function PlaceDetailsPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
   const [notFound, setNotFound] = useState(false)
+  const navigate = useNavigate()
 
   async function loadPlace() {
     setIsLoading(true)
@@ -43,6 +44,16 @@ export default function PlaceDetailsPage() {
 
     load()
   }, [id])
+
+  async function handleDeletePlace() {
+    try {
+      await deletePlace(id)
+
+      navigate('/places')
+    } catch {
+      setError('Не удалось удалить место')
+    }
+  }
 
   if (isLoading) {
     return (
@@ -106,6 +117,19 @@ export default function PlaceDetailsPage() {
           >
             Назад к списку
           </Link>
+          <Link
+            to={`/places/${id}/edit`}
+            className="place-details-back-link place-details-back-link--secondary"
+          >
+            Редактировать
+          </Link>
+          <button
+            type="button"
+            onClick={handleDeletePlace}
+            className="place-details-delete"
+          >
+            Удалить
+          </button>
         </div>
       </article>
     </main>
