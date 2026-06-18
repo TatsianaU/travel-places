@@ -75,6 +75,8 @@ export default function PlacesPage() {
 
   const hasActiveFilters = search.trim() !== '' || status !== '' || favorites !== '' || selectedCountry !== 'All' || sortValue !== ''
 
+  const isSearchOnly = search.trim() !== '' && status === '' && favorites === '' && selectedCountry === 'All' && sortValue === ''
+
   const activeFilters = []
 
   if (search.trim() !== '') {
@@ -354,6 +356,23 @@ export default function PlacesPage() {
               message={error}
               onRetry={loadPlaces}
             />
+          ) : visiblePlaces.length === 0 ? (
+            <div className="places-empty">
+              {hasActiveFilters ? (
+                <>
+                  <p className="places-empty-title">Ничего не найдено по выбранным фильтрам</p>
+                  {isSearchOnly && <p className="places-empty-hint">Поиск выполняется только по названию места.</p>}
+                  <button
+                    className="reset-filters-button"
+                    onClick={handleResetFilters}
+                  >
+                    Сбросить фильтры
+                  </button>
+                </>
+              ) : (
+                <p className="places-empty-title">Список мест пока пуст.</p>
+              )}
+            </div>
           ) : viewValue === 'table' ? (
             <PlaceTable places={visiblePlaces} />
           ) : (

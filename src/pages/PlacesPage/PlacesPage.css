@@ -158,3 +158,25 @@
 .places-page-add-link:hover {
   background: #5a4ad1;
 }
+
+.places-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 48px 16px;
+  text-align: center;
+}
+
+.places-empty-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.places-empty-hint {
+  margin: 0;
+  font-size: 14px;
+  color: #94a3b8;
+}
