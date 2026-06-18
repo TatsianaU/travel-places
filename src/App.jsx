@@ -1,15 +1,16 @@
 import './App.css'
 
-import { Routes, Route } from 'react-router-dom'
-import Header from './components/Header/Header'
+import { Route, Routes } from 'react-router-dom'
+
 import Footer from './components/Footer/Footer'
-import HomePage from './pages/HomePage/HomePage'
-import PlacesPage from './pages/PlacesPage/PlacesPage'
+import Header from './components/Header/Header'
+import AboutPage from './pages/AboutPage/AboutPage'
 import CreatePlacePage from './pages/CreatePlacePage'
 import EditPlacePage from './pages/EditPlacePage'
-import PlaceDetailsPage from './pages/PlaceDetailsPage/PlaceDetailsPage'
-import AboutPage from './pages/AboutPage/AboutPage'
+import HomePage from './pages/HomePage/HomePage'
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage'
+import PlaceDetailsPage from './pages/PlaceDetailsPage/PlaceDetailsPage'
+import PlacesPage from './pages/PlacesPage/PlacesPage'
 
 function App() {
   return (

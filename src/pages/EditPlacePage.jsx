@@ -1,7 +1,7 @@
 import './PlaceFormPage.css'
 
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams, Link } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { fetchPlace, updatePlace } from '../api/places'
 import ErrorMessage from '../components/ErrorMessage/ErrorMessage'
