@@ -19,7 +19,7 @@ import Spinner from '../../components/Spinner/Spinner'
 import ViewSwitcher from '../../components/ViewSwitcher/ViewSwitcher'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 
-const ALLOWED_SORTS = ['title', 'country']
+const ALLOWED_SORTS = ['title', 'country', '-visitedYear']
 const ALLOWED_VIEWS = ['cards', 'table']
 const DEFAULT_VIEW = 'cards'
 
@@ -38,6 +38,7 @@ const statusLabelMap = {
 const sortLabelMap = {
   title: 'По названию',
   country: 'По стране',
+  '-visitedYear': 'Новые сначала',
 }
 
 export default function PlacesPage() {
@@ -291,6 +292,7 @@ export default function PlacesPage() {
             <option value="">По умолчанию</option>
             <option value="title">По названию</option>
             <option value="country">По стране</option>
+            <option value="-visitedYear">Новые сначала</option>
           </select>
         </div>
 
