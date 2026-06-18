@@ -109,7 +109,7 @@ export default function PlaceDetailsPage() {
           <p className="place-details-id">Идентификатор места: {id}</p>
           <p className="place-details-location">{place.city ? `${place.country} — ${place.city}` : place.country}</p>
           <p className="place-details-description">{place.description}</p>
-          {place.visitedYear && <p className="place-details-year">Год посещения: {place.visitedYear}</p>}
+          {place.status === 'visited' && place.visitedYear && <p className="place-details-year">Год посещения: {place.visitedYear}</p>}
 
           <Link
             to="/places"

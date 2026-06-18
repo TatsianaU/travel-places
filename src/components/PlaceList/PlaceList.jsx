@@ -2,7 +2,7 @@ import './PlaceList.css'
 
 import PlaceCard from '../PlaceCard/PlaceCard'
 
-export default function PlaceList({ places, searchQuery, onEdit }) {
+export default function PlaceList({ places, searchQuery, onEdit, wishlistIds, onToggleWishlist }) {
   return (
     <section className="place-list-section">
       {searchQuery.trim() !== '' && <p className="place-list-count">Найдено мест: {places.length}</p>}
@@ -19,11 +19,12 @@ export default function PlaceList({ places, searchQuery, onEdit }) {
             country={place.country}
             city={place.city}
             imageUrl={place.imageUrl}
+            status={place.status}
             visitedYear={place.visitedYear}
             onEdit={() => onEdit(place)}
-          >
-            <p className="place-list-note">Добавлено в ваш список желаний</p>
-          </PlaceCard>
+            isInWishlist={wishlistIds.includes(place.id)}
+            onToggleWishlist={() => onToggleWishlist(place.id)}
+          />
         ))}
       </div>
     </section>
