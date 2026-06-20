@@ -1,9 +1,9 @@
 import './PlaceDetailsPage.css'
 
 import { useEffect, useState } from 'react'
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
-import { fetchPlace, deletePlace } from '../../api/places'
+import { deletePlace, fetchPlace } from '../../api/places'
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage'
 import Spinner from '../../components/Spinner/Spinner'
 

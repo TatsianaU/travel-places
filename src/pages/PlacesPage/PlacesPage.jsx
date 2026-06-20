@@ -1,22 +1,45 @@
 import './PlacesPage.css'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
-import { fetchPlaces } from '../../api/places'
-import { useLocalStorage } from '../../hooks/useLocalStorage'
+import { fetchPlacesPage } from '../../api/places'
 import ClickCounter from '../../components/ClickCounter/ClickCounter'
 import Clock from '../../components/Clock/Clock'
 import CountryFilter from '../../components/CountryFilter/CountryFilter'
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage'
 import Greeting from '../../components/Greeting/Greeting'
 import MousePosition from '../../components/MousePosition/MousePosition'
+import Pagination from '../../components/Pagination/Pagination'
 import PlaceList from '../../components/PlaceList/PlaceList'
+import PlaceTable from '../../components/PlaceTable/PlaceTable'
 import SearchFilter from '../../components/SearchFilter/SearchFilter'
 import Section from '../../components/Section/Section'
 import Spinner from '../../components/Spinner/Spinner'
 import ViewSwitcher from '../../components/ViewSwitcher/ViewSwitcher'
-import PlaceTable from '../../components/PlaceTable/PlaceTable'
+import { useLocalStorage } from '../../hooks/useLocalStorage'
+
+const ALLOWED_SORTS = ['title', 'country', '-visitedYear']
+const ALLOWED_VIEWS = ['cards', 'table']
+const DEFAULT_VIEW = 'cards'
+
+const DEFAULT_PAGE = 1
+const DEFAULT_PER_PAGE = 5
+const ALLOWED_PER_PAGE = [3, 5, 10]
+
+const FILTER_KEYS_THAT_RESET_PAGE = ['search', 'status', 'sort', 'perPage']
+
+const statusLabelMap = {
+  visited: 'Посещено',
+  planned: 'Планируется',
+  wishlist: 'В список желаний',
+}
+
+const sortLabelMap = {
+  title: 'По названию',
+  country: 'По стране',
+  '-visitedYear': 'Новые сначала',
+}
 
 export default function PlacesPage() {
   const [selectedCountry, setSelectedCountry] = useState('All')
@@ -24,31 +47,36 @@ export default function PlacesPage() {
   const [wishlistIds, setWishlistIds] = useLocalStorage('wishlistIds', [])
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const [placesState, setPlacesState] = useState([])
+  const [data, setData] = useState([])
+  const [pages, setPages] = useState(0)
+  const [items, setItems] = useState(0)
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const navigate = useNavigate()
-  const countries = [...new Set(placesState.map((place) => place.country))]
+
   const search = searchParams.get('search') ?? ''
   const status = searchParams.get('status') ?? ''
   const favorites = searchParams.get('favorites') ?? ''
   const sort = searchParams.get('sort') ?? ''
   const view = searchParams.get('view') ?? ''
-
-  const ALLOWED_SORTS = ['title', 'country']
-  const ALLOWED_VIEWS = ['cards', 'table']
-  const DEFAULT_VIEW = 'cards'
+  const pageRaw = searchParams.get('page') ?? ''
+  const perPageRaw = searchParams.get('perPage') ?? ''
 
   const sortValue = ALLOWED_SORTS.includes(sort) ? sort : ''
   const viewValue = ALLOWED_VIEWS.includes(view) ? view : DEFAULT_VIEW
+
+  const parsedPage = Number(pageRaw)
+  const page = Number.isInteger(parsedPage) && parsedPage > 0 ? parsedPage : DEFAULT_PAGE
+
+  const parsedPerPage = Number(perPageRaw)
+  const perPage = ALLOWED_PER_PAGE.includes(parsedPerPage) ? parsedPerPage : DEFAULT_PER_PAGE
+
+  const countries = [...new Set(data.map((place) => place.country))]
+
   const hasActiveFilters = search.trim() !== '' || status !== '' || favorites !== '' || selectedCountry !== 'All' || sortValue !== ''
 
-  const statusLabelMap = {
-    visited: 'Посещено',
-    planned: 'Планируется',
-    wishlist: 'В список желаний',
-  }
+  const isSearchOnly = search.trim() !== '' && status === '' && favorites === '' && selectedCountry === 'All' && sortValue === ''
 
   const activeFilters = []
 
@@ -62,16 +90,6 @@ export default function PlacesPage() {
 
   if (status) {
     activeFilters.push(`Статус: ${statusLabelMap[status] ?? status}`)
-  }
-
-  const sortLabelMap = {
-    title: 'По названию',
-    country: 'По стране',
-  }
-
-  const viewLabelMap = {
-    cards: 'Карточки',
-    table: 'Таблица',
   }
 
   if (sortValue) {
@@ -93,23 +111,64 @@ export default function PlacesPage() {
     setSelectedCountry('All')
   }
 
-  async function loadPlaces() {
+  const loadPlaces = useCallback(async () => {
     setIsLoading(true)
     setError(null)
 
     try {
-      const loadedPlaces = await fetchPlaces()
-      setPlacesState(loadedPlaces)
+      const result = await fetchPlacesPage({
+        search: search.trim(),
+        status,
+        sort: sortValue,
+        page,
+        perPage,
+      })
+
+      setData(result.data ?? [])
+      setPages(result.pages ?? 0)
+      setItems(result.items ?? 0)
     } catch {
       setError('Не удалось загрузить данные')
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [search, status, sortValue, page, perPage])
 
   useEffect(() => {
     loadPlaces()
-  }, [])
+  }, [loadPlaces])
+
+  useEffect(() => {
+    const candidatePage = Number(pageRaw)
+    const isPageValid = Number.isInteger(candidatePage) && candidatePage > 0
+
+    const candidatePerPage = Number(perPageRaw)
+    const isPerPageValid = ALLOWED_PER_PAGE.includes(candidatePerPage)
+
+    const shouldRemovePage = pageRaw !== '' && !isPageValid
+    const shouldRemovePerPage = perPageRaw !== '' && !isPerPageValid
+
+    if (!shouldRemovePage && !shouldRemovePerPage) {
+      return
+    }
+
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev)
+
+        if (shouldRemovePage) {
+          next.delete('page')
+        }
+
+        if (shouldRemovePerPage) {
+          next.delete('perPage')
+        }
+
+        return next
+      },
+      { replace: true }
+    )
+  }, [pageRaw, perPageRaw, setSearchParams])
 
   useEffect(() => {
     const trimmedSearch = search.trim()
@@ -134,6 +193,22 @@ export default function PlacesPage() {
       nextParams.delete(key)
     }
 
+    if (FILTER_KEYS_THAT_RESET_PAGE.includes(key)) {
+      nextParams.delete('page')
+    }
+
+    setSearchParams(nextParams)
+  }
+
+  function goToPage(nextPage) {
+    const nextParams = new URLSearchParams(searchParams)
+
+    if (nextPage === DEFAULT_PAGE) {
+      nextParams.delete('page')
+    } else {
+      nextParams.set('page', String(nextPage))
+    }
+
     setSearchParams(nextParams)
   }
 
@@ -156,22 +231,8 @@ export default function PlacesPage() {
     })
   }
 
-  const filteredPlaces = placesState
+  const visiblePlaces = data
     .filter((place) => selectedCountry === 'All' || place.country === selectedCountry)
-    .filter(
-      (place) =>
-        search.trim() === '' ||
-        place.title.toLowerCase().includes(search.toLowerCase()) ||
-        place.description.toLowerCase().includes(search.toLowerCase()) ||
-        place.country.toLowerCase().includes(search.toLowerCase())
-    )
-    .filter((place) => {
-      if (!status) {
-        return true
-      }
-
-      return place.status === status
-    })
     .filter((place) => {
       if (!favorites) {
         return true
@@ -179,8 +240,6 @@ export default function PlacesPage() {
 
       return wishlistIds.includes(place.id)
     })
-
-  const sortedPlaces = sortValue ? [...filteredPlaces].sort((a, b) => a[sortValue].localeCompare(b[sortValue], 'ru')) : filteredPlaces
 
   return (
     <div className="places-page">
@@ -233,6 +292,20 @@ export default function PlacesPage() {
             <option value="">По умолчанию</option>
             <option value="title">По названию</option>
             <option value="country">По стране</option>
+            <option value="-visitedYear">Новые сначала</option>
+          </select>
+        </div>
+
+        <div className="per-page-filter">
+          <label htmlFor="per-page-select">На странице</label>
+          <select
+            id="per-page-select"
+            value={perPage}
+            onChange={(event) => updateParam('perPage', Number(event.target.value) === DEFAULT_PER_PAGE ? '' : event.target.value)}
+          >
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
           </select>
         </div>
 
@@ -285,11 +358,28 @@ export default function PlacesPage() {
               message={error}
               onRetry={loadPlaces}
             />
+          ) : visiblePlaces.length === 0 ? (
+            <div className="places-empty">
+              {hasActiveFilters ? (
+                <>
+                  <p className="places-empty-title">Ничего не найдено по выбранным фильтрам</p>
+                  {isSearchOnly && <p className="places-empty-hint">Поиск выполняется только по названию места.</p>}
+                  <button
+                    className="reset-filters-button"
+                    onClick={handleResetFilters}
+                  >
+                    Сбросить фильтры
+                  </button>
+                </>
+              ) : (
+                <p className="places-empty-title">Список мест пока пуст.</p>
+              )}
+            </div>
           ) : viewValue === 'table' ? (
-            <PlaceTable places={sortedPlaces} />
+            <PlaceTable places={visiblePlaces} />
           ) : (
             <PlaceList
-              places={sortedPlaces}
+              places={visiblePlaces}
               searchQuery={search}
               onEdit={(place) => navigate(`/places/${place.id}/edit`)}
               wishlistIds={wishlistIds}
@@ -297,6 +387,15 @@ export default function PlacesPage() {
             />
           )}
         </Section>
+
+        {!isLoading && !error && (
+          <Pagination
+            page={page}
+            pages={pages}
+            items={items}
+            onPageChange={goToPage}
+          />
+        )}
       </main>
     </div>
   )

@@ -1,8 +1,8 @@
 import './PlaceCard.css'
 
+import { Calendar, CheckCircle, Heart, Star } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar, CheckCircle, Star, Heart } from 'lucide-react'
 
 const STATUS_CONFIG = {
   visited: {

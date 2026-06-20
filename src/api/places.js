@@ -12,6 +12,44 @@ export async function fetchPlaces() {
   return response.json()
 }
 
+export async function fetchPlacesPage({ search, status, sort, page, perPage }) {
+  const params = new URLSearchParams()
+
+  if (search) {
+    params.set('title:contains', search)
+  }
+
+  if (status) {
+    params.set('status', status)
+  }
+
+  if (sort) {
+    params.set('_sort', sort)
+  }
+
+  if (page) {
+    params.set('_page', page)
+  }
+
+  if (perPage) {
+    params.set('_per_page', perPage)
+  }
+
+  const response = await fetch(`${PLACES_URL}?${params.toString()}`)
+
+  if (!response.ok) {
+    throw new Error('Не удалось загрузить данные')
+  }
+
+  const result = await response.json()
+
+  return {
+    data: result.data,
+    pages: result.pages,
+    items: result.items,
+  }
+}
+
 export async function fetchPlace(id) {
   const response = await fetch(`${PLACES_URL}/${id}`)
 

@@ -46,25 +46,29 @@
 
 .status-filter,
 .sort-filter,
+.per-page-filter,
 .favorites-filter {
   margin: 0;
   font-size: 0.95rem;
 }
 
 .status-filter,
-.sort-filter {
+.sort-filter,
+.per-page-filter {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
 .status-filter label,
-.sort-filter label {
+.sort-filter label,
+.per-page-filter label {
   font-weight: 600;
 }
 
 .status-filter select,
-.sort-filter select {
+.sort-filter select,
+.per-page-filter select {
   padding: 8px 10px;
   border-radius: 8px;
   border: 1px solid #d1d5db;
@@ -78,7 +82,8 @@
 }
 
 .status-filter select:hover,
-.sort-filter select:hover {
+.sort-filter select:hover,
+.per-page-filter select:hover {
   border-color: #a5b4fc;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
   background-color: #f8fbff;
@@ -152,4 +157,26 @@
 
 .places-page-add-link:hover {
   background: #5a4ad1;
+}
+
+.places-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 48px 16px;
+  text-align: center;
+}
+
+.places-empty-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.places-empty-hint {
+  margin: 0;
+  font-size: 14px;
+  color: #94a3b8;
 }
