@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createPlace, deletePlace, updatePlace } from '../../api/places'
 import { placesKeys } from './queryKeys'
 
-
 export function useCreatePlace() {
   const queryClient = useQueryClient()
 
@@ -14,7 +13,6 @@ export function useCreatePlace() {
     },
   })
 }
-
 
 export function useUpdatePlace() {
   const queryClient = useQueryClient()
@@ -28,13 +26,11 @@ export function useUpdatePlace() {
   })
 }
 
-
 export function useDeletePlace() {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: (id) => deletePlace(id),
-    
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: placesKeys.all })
     },
