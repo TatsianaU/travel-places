@@ -7,6 +7,7 @@ import Header from './components/Header/Header'
 import AboutPage from './pages/AboutPage/AboutPage'
 import CreatePlacePage from './pages/CreatePlacePage'
 import EditPlacePage from './pages/EditPlacePage'
+import FavoritesPage from './pages/FavoritesPage/FavoritesPage'
 import HomePage from './pages/HomePage/HomePage'
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage'
 import PlaceDetailsPage from './pages/PlaceDetailsPage/PlaceDetailsPage'
@@ -26,6 +27,10 @@ function App() {
           <Route
             path="/places"
             element={<PlacesPage />}
+          />
+          <Route
+            path="/favorites"
+            element={<FavoritesPage />}
           />
           <Route
             path="/places/new"
