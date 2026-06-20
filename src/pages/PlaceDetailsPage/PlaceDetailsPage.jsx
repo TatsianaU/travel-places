@@ -1,61 +1,24 @@
 import './PlaceDetailsPage.css'
 
-import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
-import { deletePlace, fetchPlace } from '../../api/places'
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage'
 import Spinner from '../../components/Spinner/Spinner'
+import { useDeletePlace } from '../../features/places/usePlaceMutation'
+import { usePlaceQuery } from '../../features/places/usePlaceQuery'
 
 export default function PlaceDetailsPage() {
   const { id } = useParams()
-  const [place, setPlace] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [notFound, setNotFound] = useState(false)
   const navigate = useNavigate()
-
-  async function loadPlace() {
-    setIsLoading(true)
-    setError(null)
-    setNotFound(false)
-
-    try {
-      const loadedPlace = await fetchPlace(id)
-
-      if (loadedPlace === null) {
-        setNotFound(true)
-        setPlace(null)
-        return
-      }
-
-      setPlace(loadedPlace)
-    } catch {
-      setError('Не удалось загрузить данные')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    async function load() {
-      await loadPlace()
-    }
-
-    load()
-  }, [id])
+  const placeQuery = usePlaceQuery(id)
+  const deletePlaceMutation = useDeletePlace()
 
   async function handleDeletePlace() {
-    try {
-      await deletePlace(id)
-
-      navigate('/places')
-    } catch {
-      setError('Не удалось удалить место')
-    }
+    await deletePlaceMutation.mutateAsync(id)
+    navigate('/places')
   }
 
-  if (isLoading) {
+  if (placeQuery.isLoading) {
     return (
       <main className="place-details-page">
         <Spinner />
@@ -63,18 +26,18 @@ export default function PlaceDetailsPage() {
     )
   }
 
-  if (error) {
+  if (placeQuery.isError) {
     return (
       <main className="place-details-page">
         <ErrorMessage
-          message={error}
-          onRetry={loadPlace}
+          message="Не удалось загрузить данные"
+          onRetry={placeQuery.refetch}
         />
       </main>
     )
   }
 
-  if (notFound) {
+  if (placeQuery.data === null) {
     return (
       <main className="place-details-page">
         <div className="place-details-empty">
@@ -91,9 +54,7 @@ export default function PlaceDetailsPage() {
     )
   }
 
-  if (!place) {
-    return null
-  }
+  const place = placeQuery.data
 
   return (
     <main className="place-details-page">
@@ -127,9 +88,12 @@ export default function PlaceDetailsPage() {
             type="button"
             onClick={handleDeletePlace}
             className="place-details-delete"
+            disabled={deletePlaceMutation.isPending}
           >
-            Удалить
+            {deletePlaceMutation.isPending ? 'Удаление...' : 'Удалить'}
           </button>
+
+          {deletePlaceMutation.isError && <p className="place-details-error">Не удалось удалить место</p>}
         </div>
       </article>
     </main>

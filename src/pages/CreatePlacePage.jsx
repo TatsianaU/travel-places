@@ -2,14 +2,15 @@ import './PlaceFormPage.css'
 
 import { Link, useNavigate } from 'react-router-dom'
 
-import { createPlace } from '../api/places'
 import PlaceForm from '../components/PlaceForm/PlaceForm'
+import { useCreatePlace } from '../features/places/usePlaceMutation'
 
 export default function CreatePlacePage() {
   const navigate = useNavigate()
+  const createPlaceMutation = useCreatePlace()
 
   async function handleCreatePlace(newPlace) {
-    const createdPlace = await createPlace(newPlace)
+    const createdPlace = await createPlaceMutation.mutateAsync(newPlace)
     navigate(`/places/${createdPlace.id}`)
     return createdPlace
   }

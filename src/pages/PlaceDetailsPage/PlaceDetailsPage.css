@@ -83,6 +83,17 @@
   background: #e55a5a;
 }
 
+.place-details-delete:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.place-details-error {
+  margin-top: 12px;
+  color: #e55a5a;
+  font-weight: 600;
+}
+
 .place-details-empty {
   max-width: 560px;
   margin: 0 auto;
