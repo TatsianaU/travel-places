@@ -1,9 +1,8 @@
 import './PlacesPage.css'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
-import { fetchPlacesPage } from '../../api/places'
 import ClickCounter from '../../components/ClickCounter/ClickCounter'
 import Clock from '../../components/Clock/Clock'
 import CountryFilter from '../../components/CountryFilter/CountryFilter'
@@ -17,6 +16,7 @@ import SearchFilter from '../../components/SearchFilter/SearchFilter'
 import Section from '../../components/Section/Section'
 import Spinner from '../../components/Spinner/Spinner'
 import ViewSwitcher from '../../components/ViewSwitcher/ViewSwitcher'
+import { usePlacesQuery } from '../../features/places/usePlacesQuery'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 
 const ALLOWED_SORTS = ['title', 'country', '-visitedYear']
@@ -46,13 +46,6 @@ export default function PlacesPage() {
   const [isMouseVisible, setIsMouseVisible] = useState(true)
   const [wishlistIds, setWishlistIds] = useLocalStorage('wishlistIds', [])
   const [searchParams, setSearchParams] = useSearchParams()
-
-  const [data, setData] = useState([])
-  const [pages, setPages] = useState(0)
-  const [items, setItems] = useState(0)
-
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
   const navigate = useNavigate()
 
   const search = searchParams.get('search') ?? ''
@@ -71,6 +64,22 @@ export default function PlacesPage() {
 
   const parsedPerPage = Number(perPageRaw)
   const perPage = ALLOWED_PER_PAGE.includes(parsedPerPage) ? parsedPerPage : DEFAULT_PER_PAGE
+
+  const placesQuery = usePlacesQuery({
+    search: search.trim(),
+    status,
+    sort: sortValue,
+    page,
+    perPage,
+  })
+
+  const data = placesQuery.data?.data ?? []
+  const pages = placesQuery.data?.pages ?? 0
+  const items = placesQuery.data?.items ?? 0
+
+  const isInitialLoading = placesQuery.isPending
+  const isError = placesQuery.isError
+  const isRefreshing = placesQuery.isFetching && !placesQuery.isPending
 
   const countries = [...new Set(data.map((place) => place.country))]
 
@@ -110,33 +119,6 @@ export default function PlacesPage() {
     setSearchParams(nextParams)
     setSelectedCountry('All')
   }
-
-  const loadPlaces = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
-
-    try {
-      const result = await fetchPlacesPage({
-        search: search.trim(),
-        status,
-        sort: sortValue,
-        page,
-        perPage,
-      })
-
-      setData(result.data ?? [])
-      setPages(result.pages ?? 0)
-      setItems(result.items ?? 0)
-    } catch {
-      setError('Не удалось загрузить данные')
-    } finally {
-      setIsLoading(false)
-    }
-  }, [search, status, sortValue, page, perPage])
-
-  useEffect(() => {
-    loadPlaces()
-  }, [loadPlaces])
 
   useEffect(() => {
     const candidatePage = Number(pageRaw)
@@ -350,13 +332,15 @@ export default function PlacesPage() {
           </Link>
         </div>
 
+        {isRefreshing && <div className="places-refreshing">Обновляем список...</div>}
+
         <Section title="Популярные направления">
-          {isLoading ? (
+          {isInitialLoading ? (
             <Spinner />
-          ) : error ? (
+          ) : isError ? (
             <ErrorMessage
-              message={error}
-              onRetry={loadPlaces}
+              message="Не удалось загрузить данные"
+              onRetry={placesQuery.refetch}
             />
           ) : visiblePlaces.length === 0 ? (
             <div className="places-empty">
@@ -388,7 +372,7 @@ export default function PlacesPage() {
           )}
         </Section>
 
-        {!isLoading && !error && (
+        {!isInitialLoading && !isError && (
           <Pagination
             page={page}
             pages={pages}

@@ -27,6 +27,12 @@ export default function Header() {
             Места
           </NavLink>
           <NavLink
+            to="/favorites"
+            className={({ isActive }) => `header-link ${isActive ? 'active' : ''}`}
+          >
+            Избранное
+          </NavLink>
+          <NavLink
             to="/about"
             className={({ isActive }) => `header-link ${isActive ? 'active' : ''}`}
           >
