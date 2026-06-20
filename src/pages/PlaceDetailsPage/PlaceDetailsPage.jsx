@@ -86,6 +86,14 @@ export default function PlaceDetailsPage() {
           </Link>
           <button
             type="button"
+            onClick={() => placeQuery.refetch()}
+            className="place-details-refresh"
+            disabled={placeQuery.isFetching}
+          >
+            {placeQuery.isFetching ? 'Обновляем...' : 'Обновить'}
+          </button>
+          <button
+            type="button"
             onClick={handleDeletePlace}
             className="place-details-delete"
             disabled={deletePlaceMutation.isPending}
