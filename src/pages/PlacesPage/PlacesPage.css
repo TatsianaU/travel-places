@@ -159,6 +159,17 @@
   background: #5a4ad1;
 }
 
+.places-refreshing {
+  margin: 0 0 16px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  color: #4338ca;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
 .places-empty {
   display: flex;
   flex-direction: column;

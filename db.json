@@ -79,5 +79,6 @@
       "status": "planned",
       "id": "8"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
