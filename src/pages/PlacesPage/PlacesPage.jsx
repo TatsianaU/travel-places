@@ -11,7 +11,7 @@ import Greeting from '../../components/Greeting/Greeting'
 import MousePosition from '../../components/MousePosition/MousePosition'
 import Pagination from '../../components/Pagination/Pagination'
 import PlaceList from '../../components/PlaceList/PlaceList'
-import PlaceTable from '../../components/PlaceTable/PlaceTable'
+import FinalPlacesTable from '../../components/places/tables/FinalPlacesTable'
 import SearchFilter from '../../components/SearchFilter/SearchFilter'
 import Section from '../../components/Section/Section'
 import Spinner from '../../components/Spinner/Spinner'
@@ -360,7 +360,7 @@ export default function PlacesPage() {
               )}
             </div>
           ) : viewValue === 'table' ? (
-            <PlaceTable places={visiblePlaces} />
+            <FinalPlacesTable places={visiblePlaces} />
           ) : (
             <PlaceList
               places={visiblePlaces}
