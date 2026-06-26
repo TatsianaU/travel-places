@@ -1,4 +1,5 @@
 import { createColumnHelper } from '@tanstack/react-table'
+import { useEffect, useRef } from 'react'
 
 const statusLabelMap = {
   visited: 'Посещено',
@@ -6,9 +7,47 @@ const statusLabelMap = {
   wishlist: 'В список желаний',
 }
 
+function SelectionCheckbox({ indeterminate, ...rest }) {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.indeterminate = !rest.checked && indeterminate
+    }
+  }, [indeterminate, rest.checked])
+
+  return (
+    <input
+      ref={ref}
+      type="checkbox"
+      {...rest}
+    />
+  )
+}
+
 const columnHelper = createColumnHelper()
 
 export const placesTableColumns = [
+  columnHelper.display({
+    id: 'select',
+    enableSorting: false,
+    enableHiding: false,
+    header: ({ table }) => (
+      <SelectionCheckbox
+        checked={table.getIsAllRowsSelected()}
+        indeterminate={table.getIsSomeRowsSelected()}
+        onChange={table.getToggleAllRowsSelectedHandler()}
+      />
+    ),
+    cell: ({ row }) => (
+      <SelectionCheckbox
+        checked={row.getIsSelected()}
+        disabled={!row.getCanSelect()}
+        indeterminate={row.getIsSomeSelected()}
+        onChange={row.getToggleSelectedHandler()}
+      />
+    ),
+  }),
   columnHelper.accessor('title', {
     header: 'Название',
     meta: { label: 'Название' },
