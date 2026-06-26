@@ -79,4 +79,13 @@ export const placesTableColumns = [
     enableSorting: false,
     cell: (info) => info.getValue() || '-',
   }),
+  columnHelper.accessor('description', {
+    header: 'Описание',
+    meta: { label: 'Описание' },
+    enableSorting: false,
+    cell: (info) => {
+      const value = info.getValue() ?? ''
+      return value.length > 60 ? `${value.slice(0, 60)}...` : value
+    },
+  }),
 ]
