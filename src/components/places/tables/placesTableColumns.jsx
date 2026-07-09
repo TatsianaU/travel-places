@@ -52,6 +52,7 @@ export const placesTableColumns = [
     header: 'Название',
     meta: { label: 'Название' },
     enableSorting: false,
+    enableHiding: false,
   }),
   columnHelper.accessor('country', {
     header: 'Страна',
