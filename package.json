@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "serve:api": "json-server --watch db.json --port 3001"
+    "serve:api": "json-server --watch db.json --port 3001",
+    "generate:travel-posts": "node scripts/generate-travel-posts.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
