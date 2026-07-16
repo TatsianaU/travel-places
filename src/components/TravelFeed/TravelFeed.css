@@ -1,0 +1,68 @@
+.travel-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.travel-feed-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+  padding: 12px 16px;
+  background-color: #eef0fb;
+  border: 1px solid #dfe3f7;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.travel-feed-stat strong {
+  color: #4150c7;
+}
+
+.travel-feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.travel-feed-load-more {
+  align-self: center;
+  padding: 11px 28px;
+  border: none;
+  border-radius: 8px;
+  background-color: #667eea;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.travel-feed-load-more:hover:not(:disabled) {
+  background-color: #5568d3;
+}
+
+.travel-feed-load-more:disabled {
+  background-color: #aab0d8;
+  cursor: progress;
+}
+
+.travel-feed-status {
+  text-align: center;
+  padding: 14px;
+  color: #667eea;
+  font-weight: 500;
+}
+
+.travel-feed-end {
+  text-align: center;
+  padding: 16px;
+  color: #2e9e6b;
+  font-weight: 600;
+}
+
+.travel-feed-sentinel {
+  height: 1px;
+}

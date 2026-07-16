@@ -1,0 +1,90 @@
+.travel-post-card {
+  padding: 18px 20px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.travel-post-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.travel-post-card-category {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.travel-post-card-category--nature {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.travel-post-card-category--city {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.travel-post-card-category--food {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.travel-post-card-category--culture {
+  background: #faf5ff;
+  color: #7e22ce;
+}
+
+.travel-post-card-category--beach {
+  background: #ecfeff;
+  color: #0e7490;
+}
+
+.travel-post-card-category--mountains {
+  background: #f8fafc;
+  color: #334155;
+}
+
+.travel-post-card-reading {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.travel-post-card-title {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+  color: #1f2937;
+}
+
+.travel-post-card-excerpt {
+  margin: 0 0 14px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.travel-post-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.travel-post-card-place,
+.travel-post-card-likes {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
