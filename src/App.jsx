@@ -9,6 +9,7 @@ import CreatePlacePage from './pages/CreatePlacePage'
 import EditPlacePage from './pages/EditPlacePage'
 import FavoritesPage from './pages/FavoritesPage/FavoritesPage'
 import HomePage from './pages/HomePage/HomePage'
+import LargeFeedPage from './pages/LargeFeedPage/LargeFeedPage'
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage'
 import PlaceDetailsPage from './pages/PlaceDetailsPage/PlaceDetailsPage'
 import PlacesPage from './pages/PlacesPage/PlacesPage'
@@ -27,6 +28,10 @@ function App() {
           <Route
             path="/places"
             element={<PlacesPage />}
+          />
+          <Route
+            path="/places/feed"
+            element={<LargeFeedPage />}
           />
           <Route
             path="/favorites"

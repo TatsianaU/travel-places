@@ -1,0 +1,62 @@
+.large-feed-page {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px 24px 48px;
+}
+
+.large-feed-header {
+  margin-bottom: 24px;
+}
+
+.large-feed-title {
+  margin: 0 0 8px;
+  font-size: 1.8rem;
+  color: #1f2937;
+}
+
+.large-feed-intro {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.large-feed-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.large-feed-mode {
+  padding: 10px 16px;
+  border: 1px solid #c7d2fe;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #4338ca;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.large-feed-mode:hover {
+  background: #e0e7ff;
+}
+
+.large-feed-mode--active {
+  background: #667eea;
+  border-color: #667eea;
+  color: #ffffff;
+}
+
+.large-feed-mode-hint {
+  margin: 0 0 20px;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.large-feed-body {
+  margin-top: 8px;
+}
