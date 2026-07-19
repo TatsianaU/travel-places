@@ -68,6 +68,16 @@ export default function LargeFeedPage() {
             ))}
           </select>
         </label>
+
+        {category !== '' && (
+          <button
+            type="button"
+            className="large-feed-filter-reset"
+            onClick={() => setCategory('')}
+          >
+            Сбросить
+          </button>
+        )}
       </div>
 
       <div className="large-feed-body">
