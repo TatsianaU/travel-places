@@ -5,6 +5,7 @@ import { useState } from 'react'
 import InfiniteScrollTravelPosts from '../../components/TravelFeed/InfiniteScrollTravelPosts'
 import LoadMoreTravelPosts from '../../components/TravelFeed/LoadMoreTravelPosts'
 import VirtualizedTravelPosts from '../../components/TravelFeed/VirtualizedTravelPosts'
+import { TRAVEL_POST_CATEGORY_LABEL } from '../../data/travelPosts'
 
 const MODES = [
   { id: 'button', label: 'Кнопка', hint: 'Базовый функционал: следующая страница загружается по клику' },
@@ -14,6 +15,7 @@ const MODES = [
 
 export default function LargeFeedPage() {
   const [mode, setMode] = useState('infinite')
+  const [category, setCategory] = useState('')
   const activeMode = MODES.find((item) => item.id === mode)
 
   return (
@@ -43,10 +45,35 @@ export default function LargeFeedPage() {
 
       {activeMode && <p className="large-feed-mode-hint">{activeMode.hint}</p>}
 
+      <div className="large-feed-filters">
+        <label
+          className="large-feed-filter"
+          htmlFor="travel-category-filter"
+        >
+          Категория
+          <select
+            id="travel-category-filter"
+            className="large-feed-filter-select"
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
+          >
+            <option value="">Все</option>
+            {Object.entries(TRAVEL_POST_CATEGORY_LABEL).map(([value, label]) => (
+              <option
+                key={value}
+                value={value}
+              >
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
       <div className="large-feed-body">
-        {mode === 'button' && <LoadMoreTravelPosts />}
-        {mode === 'infinite' && <InfiniteScrollTravelPosts />}
-        {mode === 'virtual' && <VirtualizedTravelPosts />}
+        {mode === 'button' && <LoadMoreTravelPosts category={category} />}
+        {mode === 'infinite' && <InfiniteScrollTravelPosts category={category} />}
+        {mode === 'virtual' && <VirtualizedTravelPosts category={category} />}
       </div>
     </section>
   )

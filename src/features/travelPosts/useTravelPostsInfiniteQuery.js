@@ -5,10 +5,10 @@ import { travelPostsKeys } from './queryKeys'
 
 const PER_PAGE = 20
 
-export function useTravelPostsInfiniteQuery() {
+export function useTravelPostsInfiniteQuery(category = '') {
   const query = useInfiniteQuery({
-    queryKey: travelPostsKeys.infinite(),
-    queryFn: ({ pageParam }) => getTravelPostsPage({ page: pageParam, perPage: PER_PAGE }),
+    queryKey: travelPostsKeys.infinite(category),
+    queryFn: ({ pageParam }) => getTravelPostsPage({ page: pageParam, perPage: PER_PAGE, category }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
   })

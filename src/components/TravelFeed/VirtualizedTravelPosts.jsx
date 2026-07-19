@@ -10,8 +10,8 @@ import TravelPostCard from '../TravelPostCard/TravelPostCard'
 
 const ROW_HEIGHT = 172
 
-export default function VirtualizedTravelPosts() {
-  const { data: posts, isPending, isError, error, refetch } = useManyTravelPostsQuery()
+export default function VirtualizedTravelPosts({ category = '' }) {
+  const { data: posts, isPending, isError, error, refetch } = useManyTravelPostsQuery({ category })
   const scrollRef = useRef(null)
 
   // eslint-disable-next-line react-hooks/incompatible-library

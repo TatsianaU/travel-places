@@ -7,9 +7,9 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage'
 import Spinner from '../Spinner/Spinner'
 import TravelPostCard from '../TravelPostCard/TravelPostCard'
 
-export default function InfiniteScrollTravelPosts() {
+export default function InfiniteScrollTravelPosts({ category = '' }) {
   const { posts, totalItems, loadedPages, fetchNextPage, hasNextPage, isFetchingNextPage, isPending, isError, error, refetch } =
-    useTravelPostsInfiniteQuery()
+    useTravelPostsInfiniteQuery(category)
 
   const sentinelRef = useRef(null)
 

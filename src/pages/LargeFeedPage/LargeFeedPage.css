@@ -57,6 +57,35 @@
   font-size: 0.95rem;
 }
 
+.large-feed-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.large-feed-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.large-feed-filter-select {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1f2937;
+  cursor: pointer;
+}
+
+.large-feed-filter-select:hover {
+  border-color: #a5b4fc;
+}
+
 .large-feed-body {
   margin-top: 8px;
 }
