@@ -66,3 +66,31 @@
 .travel-feed-sentinel {
   height: 1px;
 }
+
+.travel-feed-stat--hint {
+  width: 100%;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.travel-feed-scroll {
+  height: 70vh;
+  overflow: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.travel-feed-virtual-inner {
+  position: relative;
+  width: 100%;
+}
+
+.travel-feed-virtual-row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 12px 12px;
+}

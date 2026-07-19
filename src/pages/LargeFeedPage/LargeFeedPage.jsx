@@ -4,10 +4,12 @@ import { useState } from 'react'
 
 import InfiniteScrollTravelPosts from '../../components/TravelFeed/InfiniteScrollTravelPosts'
 import LoadMoreTravelPosts from '../../components/TravelFeed/LoadMoreTravelPosts'
+import VirtualizedTravelPosts from '../../components/TravelFeed/VirtualizedTravelPosts'
 
 const MODES = [
   { id: 'button', label: 'Кнопка', hint: 'Базовый функционал: следующая страница загружается по клику' },
   { id: 'infinite', label: 'Автоподгрузка', hint: 'Базовый функционал + IntersectionObserver: страницы грузятся при скролле' },
+  { id: 'virtual', label: 'Виртуализация', hint: 'Большая выборка в памяти: в DOM только видимые карточки + overscan' },
 ]
 
 export default function LargeFeedPage() {
@@ -44,6 +46,7 @@ export default function LargeFeedPage() {
       <div className="large-feed-body">
         {mode === 'button' && <LoadMoreTravelPosts />}
         {mode === 'infinite' && <InfiniteScrollTravelPosts />}
+        {mode === 'virtual' && <VirtualizedTravelPosts />}
       </div>
     </section>
   )
