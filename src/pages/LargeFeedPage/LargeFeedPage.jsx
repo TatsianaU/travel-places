@@ -1,6 +1,7 @@
 import './LargeFeedPage.css'
 
 import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 import InfiniteScrollTravelPosts from '../../components/TravelFeed/InfiniteScrollTravelPosts'
 import LoadMoreTravelPosts from '../../components/TravelFeed/LoadMoreTravelPosts'
@@ -13,10 +14,28 @@ const MODES = [
   { id: 'virtual', label: 'Виртуализация', hint: 'Большая выборка в памяти: в DOM только видимые карточки + overscan' },
 ]
 
+const ALLOWED_MODES = MODES.map((item) => item.id)
+const DEFAULT_MODE = 'button'
+
 export default function LargeFeedPage() {
-  const [mode, setMode] = useState('infinite')
+  const [searchParams, setSearchParams] = useSearchParams()
   const [category, setCategory] = useState('')
+
+  const modeRaw = searchParams.get('mode') ?? ''
+  const mode = ALLOWED_MODES.includes(modeRaw) ? modeRaw : DEFAULT_MODE
   const activeMode = MODES.find((item) => item.id === mode)
+
+  function setMode(nextMode) {
+    const nextParams = new URLSearchParams(searchParams)
+
+    if (nextMode === DEFAULT_MODE) {
+      nextParams.delete('mode')
+    } else {
+      nextParams.set('mode', nextMode)
+    }
+
+    setSearchParams(nextParams)
+  }
 
   return (
     <section className="large-feed-page">
