@@ -17,7 +17,7 @@ body {
 
 .app__content {
   flex: 1;
-  background: #f5f5f7;
+  background: var(--color-bg);
 }
 
 .top-panel {

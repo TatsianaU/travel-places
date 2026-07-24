@@ -3,9 +3,12 @@ import './Header.css'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
+import ThemeToggle from '../ThemeToggle/ThemeToggle'
+
 export default function Header() {
   return (
     <header className="header">
+      <ThemeToggle />
       <div className="header-top">
         <div>
           <h1 className="header-title">Travel Places</h1>
