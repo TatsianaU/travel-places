@@ -5,9 +5,9 @@ import { travelPostsKeys } from './queryKeys'
 
 const DEFAULT_LIMIT = 1000
 
-export function useManyTravelPostsQuery(limit = DEFAULT_LIMIT) {
+export function useManyTravelPostsQuery({ limit = DEFAULT_LIMIT, category = '' } = {}) {
   return useQuery({
-    queryKey: travelPostsKeys.many(limit),
-    queryFn: () => getManyTravelPosts({ limit }),
+    queryKey: travelPostsKeys.many(limit, category),
+    queryFn: () => getManyTravelPosts({ limit, category }),
   })
 }

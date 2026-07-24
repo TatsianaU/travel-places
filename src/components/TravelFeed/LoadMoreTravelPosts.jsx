@@ -5,9 +5,9 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage'
 import Spinner from '../Spinner/Spinner'
 import TravelPostCard from '../TravelPostCard/TravelPostCard'
 
-export default function LoadMoreTravelPosts() {
+export default function LoadMoreTravelPosts({ category = '' }) {
   const { posts, totalItems, loadedPages, fetchNextPage, hasNextPage, isFetchingNextPage, isPending, isError, error, refetch } =
-    useTravelPostsInfiniteQuery()
+    useTravelPostsInfiniteQuery(category)
 
   if (isPending) {
     return <Spinner />

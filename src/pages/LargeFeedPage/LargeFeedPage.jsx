@@ -1,10 +1,12 @@
 import './LargeFeedPage.css'
 
 import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 import InfiniteScrollTravelPosts from '../../components/TravelFeed/InfiniteScrollTravelPosts'
 import LoadMoreTravelPosts from '../../components/TravelFeed/LoadMoreTravelPosts'
 import VirtualizedTravelPosts from '../../components/TravelFeed/VirtualizedTravelPosts'
+import { TRAVEL_POST_CATEGORY_LABEL } from '../../data/travelPosts'
 
 const MODES = [
   { id: 'button', label: 'Кнопка', hint: 'Базовый функционал: следующая страница загружается по клику' },
@@ -12,9 +14,28 @@ const MODES = [
   { id: 'virtual', label: 'Виртуализация', hint: 'Большая выборка в памяти: в DOM только видимые карточки + overscan' },
 ]
 
+const ALLOWED_MODES = MODES.map((item) => item.id)
+const DEFAULT_MODE = 'button'
+
 export default function LargeFeedPage() {
-  const [mode, setMode] = useState('infinite')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [category, setCategory] = useState('')
+
+  const modeRaw = searchParams.get('mode') ?? ''
+  const mode = ALLOWED_MODES.includes(modeRaw) ? modeRaw : DEFAULT_MODE
   const activeMode = MODES.find((item) => item.id === mode)
+
+  function setMode(nextMode) {
+    const nextParams = new URLSearchParams(searchParams)
+
+    if (nextMode === DEFAULT_MODE) {
+      nextParams.delete('mode')
+    } else {
+      nextParams.set('mode', nextMode)
+    }
+
+    setSearchParams(nextParams)
+  }
 
   return (
     <section className="large-feed-page">
@@ -43,10 +64,45 @@ export default function LargeFeedPage() {
 
       {activeMode && <p className="large-feed-mode-hint">{activeMode.hint}</p>}
 
+      <div className="large-feed-filters">
+        <label
+          className="large-feed-filter"
+          htmlFor="travel-category-filter"
+        >
+          Категория
+          <select
+            id="travel-category-filter"
+            className="large-feed-filter-select"
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
+          >
+            <option value="">Все</option>
+            {Object.entries(TRAVEL_POST_CATEGORY_LABEL).map(([value, label]) => (
+              <option
+                key={value}
+                value={value}
+              >
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        {category !== '' && (
+          <button
+            type="button"
+            className="large-feed-filter-reset"
+            onClick={() => setCategory('')}
+          >
+            Сбросить
+          </button>
+        )}
+      </div>
+
       <div className="large-feed-body">
-        {mode === 'button' && <LoadMoreTravelPosts />}
-        {mode === 'infinite' && <InfiniteScrollTravelPosts />}
-        {mode === 'virtual' && <VirtualizedTravelPosts />}
+        {mode === 'button' && <LoadMoreTravelPosts category={category} />}
+        {mode === 'infinite' && <InfiniteScrollTravelPosts category={category} />}
+        {mode === 'virtual' && <VirtualizedTravelPosts category={category} />}
       </div>
     </section>
   )

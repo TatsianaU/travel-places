@@ -1,5 +1,5 @@
 export const travelPostsKeys = {
   all: ['travelPosts'],
-  infinite: () => [...travelPostsKeys.all, 'infinite'],
-  many: (limit) => [...travelPostsKeys.all, 'many', limit],
+  infinite: (category = '') => [...travelPostsKeys.all, 'infinite', category],
+  many: (limit, category = '') => [...travelPostsKeys.all, 'many', limit, category],
 }
