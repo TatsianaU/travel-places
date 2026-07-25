@@ -1,8 +1,10 @@
 .home-page {
   padding: 64px 20px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 28px;
   min-height: calc(100vh - 220px);
 }
 
@@ -42,4 +44,50 @@
 
 .home-page__button:hover {
   background: #5a67d8;
+}
+
+.home-page__recent {
+  width: 100%;
+  max-width: 760px;
+  padding: 24px 28px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+}
+
+.home-page__recent-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.home-page__recent-title {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--color-text);
+}
+
+.home-page__recent-clear {
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.home-page__recent-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--color-text);
+}
+
+.home-page__recent-link {
+  color: #667eea;
+  text-decoration: none;
+}
+
+.home-page__recent-link:hover {
+  text-decoration: underline;
 }

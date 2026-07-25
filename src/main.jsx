@@ -7,6 +7,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 
 import App from './App.jsx'
+import { RecentPlacesProvider } from './features/recentPlaces/RecentPlacesProvider'
 import { ThemeProvider } from './features/theme/ThemeProvider'
 
 const queryClient = new QueryClient({
@@ -24,7 +25,9 @@ createRoot(document.getElementById('root')).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <ThemeProvider>
-          <App />
+          <RecentPlacesProvider>
+            <App />
+          </RecentPlacesProvider>
         </ThemeProvider>
       </BrowserRouter>
 

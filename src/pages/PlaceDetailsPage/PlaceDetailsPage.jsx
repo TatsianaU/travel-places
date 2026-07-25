@@ -1,17 +1,28 @@
 import './PlaceDetailsPage.css'
 
+import { useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage'
 import Spinner from '../../components/Spinner/Spinner'
 import { useDeletePlace } from '../../features/places/usePlaceMutation'
 import { usePlaceQuery } from '../../features/places/usePlaceQuery'
+import { useRecentPlaces } from '../../features/recentPlaces/useRecentPlaces'
 
 export default function PlaceDetailsPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const placeQuery = usePlaceQuery(id)
   const deletePlaceMutation = useDeletePlace()
+  const { markViewed } = useRecentPlaces()
+
+  useEffect(() => {
+    if (placeQuery.data == null) {
+      return
+    }
+
+    markViewed(placeQuery.data.id)
+  }, [placeQuery.data, markViewed])
 
   async function handleDeletePlace() {
     await deletePlaceMutation.mutateAsync(id)
