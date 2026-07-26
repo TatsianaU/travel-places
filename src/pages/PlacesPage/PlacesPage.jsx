@@ -17,6 +17,7 @@ import Section from '../../components/Section/Section'
 import Spinner from '../../components/Spinner/Spinner'
 import ViewSwitcher from '../../components/ViewSwitcher/ViewSwitcher'
 import { usePlacesQuery } from '../../features/places/usePlacesQuery'
+import { useToasts } from '../../features/toasts/useToasts'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 
 const ALLOWED_SORTS = ['title', 'country', '-visitedYear']
@@ -47,6 +48,7 @@ export default function PlacesPage() {
   const [wishlistIds, setWishlistIds] = useLocalStorage('wishlistIds', [])
   const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
+  const { showToast } = useToasts()
 
   const search = searchParams.get('search') ?? ''
   const status = searchParams.get('status') ?? ''
@@ -204,13 +206,15 @@ export default function PlacesPage() {
   }
 
   function handleToggleWishlist(id) {
-    setWishlistIds((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((wishlistId) => wishlistId !== id)
-      }
+    const isFavorite = wishlistIds.includes(id)
 
-      return [...prev, id]
-    })
+    if (isFavorite) {
+      setWishlistIds((prev) => prev.filter((wishlistId) => wishlistId !== id))
+      return
+    }
+
+    setWishlistIds((prev) => [...prev, id])
+    showToast('Место добавлено в избранное')
   }
 
   const visiblePlaces = data

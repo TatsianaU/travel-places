@@ -15,5 +15,9 @@ export function useFavoritePlaces() {
     setFavoriteIds((prev) => (prev.includes(id) ? prev.filter((favoriteId) => favoriteId !== id) : [...prev, id]))
   }
 
-  return { favorites, favoriteIds, toggleFavorite }
+  const clearFavorites = () => {
+    setFavoriteIds([])
+  }
+
+  return { favorites, favoriteIds, toggleFavorite, clearFavorites }
 }

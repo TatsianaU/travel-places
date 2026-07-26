@@ -8,6 +8,7 @@ import Spinner from '../../components/Spinner/Spinner'
 import { useDeletePlace } from '../../features/places/usePlaceMutation'
 import { usePlaceQuery } from '../../features/places/usePlaceQuery'
 import { useRecentPlaces } from '../../features/recentPlaces/useRecentPlaces'
+import { useToasts } from '../../features/toasts/useToasts'
 
 export default function PlaceDetailsPage() {
   const { id } = useParams()
@@ -15,6 +16,7 @@ export default function PlaceDetailsPage() {
   const placeQuery = usePlaceQuery(id)
   const deletePlaceMutation = useDeletePlace()
   const { markViewed } = useRecentPlaces()
+  const { showToast } = useToasts()
 
   useEffect(() => {
     if (placeQuery.data == null) {
@@ -26,6 +28,7 @@ export default function PlaceDetailsPage() {
 
   async function handleDeletePlace() {
     await deletePlaceMutation.mutateAsync(id)
+    showToast('Место удалено')
     navigate('/places')
   }
 

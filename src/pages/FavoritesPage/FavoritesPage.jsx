@@ -4,10 +4,17 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import PlaceList from '../../components/PlaceList/PlaceList'
 import { useFavoritePlaces } from '../../features/places/useFavoritePlaces'
+import { useToasts } from '../../features/toasts/useToasts'
 
 export default function FavoritesPage() {
   const navigate = useNavigate()
-  const { favorites, favoriteIds, toggleFavorite } = useFavoritePlaces()
+  const { favorites, favoriteIds, toggleFavorite, clearFavorites } = useFavoritePlaces()
+  const { showToast } = useToasts()
+
+  function handleClearFavorites() {
+    clearFavorites()
+    showToast('Избранное очищено')
+  }
 
   return (
     <main className="favorites-page">
@@ -27,13 +34,25 @@ export default function FavoritesPage() {
           </Link>
         </div>
       ) : (
-        <PlaceList
-          places={favorites}
-          searchQuery=""
-          onEdit={(place) => navigate(`/places/${place.id}/edit`)}
-          wishlistIds={favoriteIds}
-          onToggleWishlist={toggleFavorite}
-        />
+        <>
+          <PlaceList
+            places={favorites}
+            searchQuery=""
+            onEdit={(place) => navigate(`/places/${place.id}/edit`)}
+            wishlistIds={favoriteIds}
+            onToggleWishlist={toggleFavorite}
+          />
+
+          {favoriteIds.length > 0 && (
+            <button
+              type="button"
+              className="favorites-clear"
+              onClick={handleClearFavorites}
+            >
+              Очистить избранное
+            </button>
+          )}
+        </>
       )}
     </main>
   )

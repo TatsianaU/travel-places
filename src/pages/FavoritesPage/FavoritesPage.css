@@ -48,3 +48,20 @@
 .favorites-empty-link:hover {
   background: #5a4ad1;
 }
+
+.favorites-clear {
+  display: block;
+  margin: 24px auto 0;
+  padding: 10px 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #475569;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.favorites-clear:hover {
+  background: #f8fafc;
+}
