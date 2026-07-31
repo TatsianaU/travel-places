@@ -43,15 +43,13 @@ export default function FavoritesPage() {
             onToggleWishlist={toggleFavorite}
           />
 
-          {favoriteIds.length > 0 && (
-            <button
-              type="button"
-              className="favorites-clear"
-              onClick={handleClearFavorites}
-            >
-              Очистить избранное
-            </button>
-          )}
+          <button
+            type="button"
+            className="favorites-clear"
+            onClick={handleClearFavorites}
+          >
+            Очистить избранное
+          </button>
         </>
       )}
     </main>
