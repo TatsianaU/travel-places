@@ -1,0 +1,61 @@
+.compare-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 900;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text);
+  box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.12);
+}
+
+.compare-bar__inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+
+.compare-bar__count {
+  margin: 0;
+  font-weight: 700;
+}
+
+.compare-bar__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  flex: 1;
+}
+
+.compare-bar__link {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.compare-bar__link:hover {
+  text-decoration: underline;
+}
+
+.compare-bar__clear {
+  margin-left: auto;
+  padding: 8px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.compare-bar__clear:hover {
+  background: var(--color-bg);
+}
