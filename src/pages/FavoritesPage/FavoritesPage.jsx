@@ -3,13 +3,20 @@ import './FavoritesPage.css'
 import { Link, useNavigate } from 'react-router-dom'
 
 import PlaceList from '../../components/PlaceList/PlaceList'
-import { useFavoritePlaces } from '../../features/places/useFavoritePlaces'
+import { useFavorites } from '../../features/favorites/useFavorites'
+import { useAllPlacesQuery } from '../../features/places/useAllPlacesQuery'
 import { useToasts } from '../../features/toasts/useToasts'
 
 export default function FavoritesPage() {
   const navigate = useNavigate()
-  const { favorites, favoriteIds, toggleFavorite, clearFavorites } = useFavoritePlaces()
+  const { favoriteIds, toggleFavorite, clearFavorites } = useFavorites()
+  const placesQuery = useAllPlacesQuery()
   const { showToast } = useToasts()
+
+  const places = placesQuery.data ?? []
+  const favorites = favoriteIds
+    .map((id) => places.find((place) => place.id === id))
+    .filter((place) => place != null)
 
   function handleClearFavorites() {
     clearFavorites()
@@ -20,11 +27,11 @@ export default function FavoritesPage() {
     <main className="favorites-page">
       <h1 className="favorites-page-title">Избранное</h1>
 
-      {favorites.length === 0 ? (
+      {favoriteIds.length === 0 ? (
         <div className="favorites-empty">
           <p className="favorites-empty-title">В избранном пока пусто.</p>
           <p className="favorites-empty-hint">
-            Добавляйте места в избранное на странице «Места». Место появится здесь после того, как вы откроете его страницу с деталями.
+            Добавляйте места в избранное на странице «Места».
           </p>
           <Link
             to="/places"
