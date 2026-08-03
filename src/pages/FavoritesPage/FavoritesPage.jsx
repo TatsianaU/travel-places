@@ -3,6 +3,7 @@ import './FavoritesPage.css'
 import { Link, useNavigate } from 'react-router-dom'
 
 import PlaceList from '../../components/PlaceList/PlaceList'
+import Spinner from '../../components/Spinner/Spinner'
 import { useFavorites } from '../../features/favorites/useFavorites'
 import { useAllPlacesQuery } from '../../features/places/useAllPlacesQuery'
 import { useToasts } from '../../features/toasts/useToasts'
@@ -40,6 +41,8 @@ export default function FavoritesPage() {
             Перейти к местам
           </Link>
         </div>
+      ) : placesQuery.isPending ? (
+        <Spinner />
       ) : (
         <>
           <PlaceList

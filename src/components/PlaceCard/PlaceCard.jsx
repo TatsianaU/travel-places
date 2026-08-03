@@ -4,7 +4,7 @@ import { Calendar, CheckCircle, Heart, Star } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { useComparePlacesStore } from '../../features/comparePlaces/comparePlacesStore'
+import { MAX_COMPARE, useComparePlacesStore } from '../../features/comparePlaces/comparePlacesStore'
 
 const STATUS_CONFIG = {
   visited: {
@@ -38,7 +38,7 @@ export default function PlaceCard({
   const [showDetails, setShowDetails] = useState(false)
   const isInCompare = useComparePlacesStore((state) => (id ? state.compareIds.includes(id) : false))
   const toggleCompare = useComparePlacesStore((state) => state.toggleCompare)
-  const canAddMore = useComparePlacesStore((state) => state.compareIds.length < 3)
+  const canAddMore = useComparePlacesStore((state) => state.compareIds.length < MAX_COMPARE)
   const isCompareDisabled = Boolean(id) && !isInCompare && !canAddMore
 
   const toggleDetails = () => {
@@ -90,7 +90,7 @@ export default function PlaceCard({
                 isInCompare
                   ? 'Убрать из сравнения'
                   : isCompareDisabled
-                    ? 'Можно сравнить не больше 3 мест'
+                    ? `Можно сравнить не больше ${MAX_COMPARE} мест`
                     : 'Добавить к сравнению'
               }
             >

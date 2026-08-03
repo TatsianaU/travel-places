@@ -1,7 +1,5 @@
 .compare-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
+  position: sticky;
   bottom: 0;
   z-index: 900;
   background: var(--color-surface);

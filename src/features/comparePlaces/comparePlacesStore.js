@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 const COMPARE_PLACES_STORAGE_KEY = 'compare-places-store'
-const MAX_COMPARE = 3
+export const MAX_COMPARE = 3
 
 export const useComparePlacesStore = create(
   persist(
