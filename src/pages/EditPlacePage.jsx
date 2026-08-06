@@ -66,6 +66,7 @@ export default function EditPlacePage() {
       </Link>
 
       <PlaceForm
+        key={placeQuery.data.id}
         placeToEdit={placeQuery.data}
         onUpdatePlace={handleUpdatePlace}
         onCancelEdit={() => navigate(`/places/${id}`)}

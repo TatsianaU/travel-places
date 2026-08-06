@@ -41,6 +41,7 @@
 
 .place-card-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
   margin-bottom: 14px;
@@ -155,6 +156,15 @@
 
 .place-card-button:hover {
   background: #eef2ff;
+}
+
+.place-card-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.place-card-button:disabled:hover {
+  background: #ffffff;
 }
 
 .place-card-button--secondary {

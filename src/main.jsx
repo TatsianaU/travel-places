@@ -8,6 +8,8 @@ import { BrowserRouter } from 'react-router-dom'
 
 import App from './App.jsx'
 import ToastList from './components/Toast/ToastList'
+import { FavoritesProvider } from './features/favorites/FavoritesProvider'
+import { USE_FAVORITES_STORE } from './features/favorites/favoritesMode'
 import { RecentPlacesProvider } from './features/recentPlaces/RecentPlacesProvider'
 import { ThemeProvider } from './features/theme/ThemeProvider'
 import { ToastProvider } from './features/toasts/ToastProvider'
@@ -22,17 +24,31 @@ const queryClient = new QueryClient({
   },
 })
 
+function AppProviders({ children }) {
+  const tree = (
+    <RecentPlacesProvider>
+      <ToastProvider>
+        {children}
+        <ToastList />
+      </ToastProvider>
+    </RecentPlacesProvider>
+  )
+
+  if (USE_FAVORITES_STORE) {
+    return tree
+  }
+
+  return <FavoritesProvider>{tree}</FavoritesProvider>
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <ThemeProvider>
-          <RecentPlacesProvider>
-            <ToastProvider>
-              <App />
-              <ToastList />
-            </ToastProvider>
-          </RecentPlacesProvider>
+          <AppProviders>
+            <App />
+          </AppProviders>
         </ThemeProvider>
       </BrowserRouter>
 

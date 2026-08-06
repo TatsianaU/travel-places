@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import Footer from './components/Footer/Footer'
 import Header from './components/Header/Header'
+import CompareBar from './components/CompareBar/CompareBar'
 import AboutPage from './pages/AboutPage/AboutPage'
 import CreatePlacePage from './pages/CreatePlacePage'
 import EditPlacePage from './pages/EditPlacePage'
@@ -61,6 +62,7 @@ function App() {
       </div>
 
       <Footer />
+      <CompareBar />
     </div>
   )
 }

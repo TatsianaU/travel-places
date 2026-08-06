@@ -4,6 +4,8 @@ import { Calendar, CheckCircle, Heart, Star } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import { MAX_COMPARE, useComparePlacesStore } from '../../features/comparePlaces/comparePlacesStore'
+
 const STATUS_CONFIG = {
   visited: {
     icon: CheckCircle,
@@ -34,6 +36,10 @@ export default function PlaceCard({
   onToggleWishlist,
 }) {
   const [showDetails, setShowDetails] = useState(false)
+  const isInCompare = useComparePlacesStore((state) => (id ? state.compareIds.includes(id) : false))
+  const toggleCompare = useComparePlacesStore((state) => state.toggleCompare)
+  const canAddMore = useComparePlacesStore((state) => state.compareIds.length < MAX_COMPARE)
+  const isCompareDisabled = Boolean(id) && !isInCompare && !canAddMore
 
   const toggleDetails = () => {
     setShowDetails(!showDetails)
@@ -74,6 +80,24 @@ export default function PlaceCard({
             </button>
           )}
 
+          {id && (
+            <button
+              className={`place-card-button ${isInCompare ? 'place-card-button--active' : ''}`}
+              type="button"
+              onClick={() => toggleCompare(id)}
+              disabled={isCompareDisabled}
+              title={
+                isInCompare
+                  ? 'Убрать из сравнения'
+                  : isCompareDisabled
+                    ? `Можно сравнить не больше ${MAX_COMPARE} мест`
+                    : 'Добавить к сравнению'
+              }
+            >
+              {isInCompare ? 'Убрать из сравнения' : 'К сравнению'}
+            </button>
+          )}
+
           {onEdit && (
             <button
               className="place-card-button place-card-button--secondary"
@@ -104,9 +128,6 @@ export default function PlaceCard({
         {status === 'visited' && visitedYear && <p className="place-card-visited-year">Посещено в {visitedYear}</p>}
 
         {showDetails && <p className="place-card-description">{description}</p>}
-
-        {/* children - это все, что передано между <PlaceCard></PlaceCard> */}
-        {/* Если children не переданы, блок не отрисуется */}
 
         {children}
       </div>

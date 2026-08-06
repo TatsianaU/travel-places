@@ -1,7 +1,7 @@
 import './PlaceForm.css'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 
 import { placeFormSchema } from './placeFormSchema'
@@ -30,20 +30,6 @@ export default function PlaceForm({ onAddPlace, placeToEdit, onUpdatePlace, onCa
     resolver: zodResolver(placeFormSchema),
     defaultValues: placeToEdit ?? INITIAL_FORM_DATA,
   })
-
-  useEffect(() => {
-    if (!placeToEdit) return
-
-    reset({
-      title: placeToEdit.title,
-      country: placeToEdit.country,
-      city: placeToEdit.city ?? '',
-      description: placeToEdit.description,
-      imageUrl: placeToEdit.imageUrl,
-      status: placeToEdit.status,
-      visitedYear: placeToEdit.visitedYear,
-    })
-  }, [placeToEdit, reset])
 
   const descriptionValue = useWatch({ control, name: 'description' }) ?? ''
   const statusValue = useWatch({

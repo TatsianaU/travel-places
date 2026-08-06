@@ -16,9 +16,9 @@ import SearchFilter from '../../components/SearchFilter/SearchFilter'
 import Section from '../../components/Section/Section'
 import Spinner from '../../components/Spinner/Spinner'
 import ViewSwitcher from '../../components/ViewSwitcher/ViewSwitcher'
+import { useFavorites } from '../../features/favorites/useFavorites'
 import { usePlacesQuery } from '../../features/places/usePlacesQuery'
 import { useToasts } from '../../features/toasts/useToasts'
-import { useLocalStorage } from '../../hooks/useLocalStorage'
 
 const ALLOWED_SORTS = ['title', 'country', '-visitedYear']
 const ALLOWED_VIEWS = ['cards', 'table']
@@ -45,10 +45,10 @@ const sortLabelMap = {
 export default function PlacesPage() {
   const [selectedCountry, setSelectedCountry] = useState('All')
   const [isMouseVisible, setIsMouseVisible] = useState(true)
-  const [wishlistIds, setWishlistIds] = useLocalStorage('wishlistIds', [])
   const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   const { showToast } = useToasts()
+  const { favoriteIds, toggleFavorite, isFavorite } = useFavorites()
 
   const search = searchParams.get('search') ?? ''
   const status = searchParams.get('status') ?? ''
@@ -206,14 +206,12 @@ export default function PlacesPage() {
   }
 
   function handleToggleWishlist(id) {
-    const isFavorite = wishlistIds.includes(id)
-
-    if (isFavorite) {
-      setWishlistIds((prev) => prev.filter((wishlistId) => wishlistId !== id))
+    if (isFavorite(id)) {
+      toggleFavorite(id)
       return
     }
 
-    setWishlistIds((prev) => [...prev, id])
+    toggleFavorite(id)
     showToast('Место добавлено в избранное')
   }
 
@@ -224,7 +222,7 @@ export default function PlacesPage() {
         return true
       }
 
-      return wishlistIds.includes(place.id)
+      return favoriteIds.includes(place.id)
     })
 
   return (
@@ -370,7 +368,7 @@ export default function PlacesPage() {
               places={visiblePlaces}
               searchQuery={search}
               onEdit={(place) => navigate(`/places/${place.id}/edit`)}
-              wishlistIds={wishlistIds}
+              wishlistIds={favoriteIds}
               onToggleWishlist={handleToggleWishlist}
             />
           )}

@@ -25,7 +25,8 @@
     "react-hook-form": "^7.76.1",
     "react-router-dom": "^7.16.0",
     "tailwindcss": "^4.2.2",
-    "zod": "^4.4.3"
+    "zod": "^4.4.3",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
