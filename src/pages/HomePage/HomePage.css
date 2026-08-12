@@ -8,6 +8,41 @@
   min-height: calc(100vh - 220px);
 }
 
+.render-count-compare {
+  width: fit-content;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.render-count-compare__title {
+  text-align: center;
+}
+
+.render-count-compare__readout {
+  grid-template-columns: 1fr auto;
+  gap: 8px 16px;
+  margin-bottom: 10px;
+}
+
+.render-count-compare__readout dd {
+  text-align: right;
+}
+
+.render-count-compare__button {
+  margin-top: 12px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.render-count-compare__button:hover {
+  border-color: var(--color-accent);
+}
+
 .home-page__box {
   max-width: 760px;
   background: white;
