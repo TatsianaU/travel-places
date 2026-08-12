@@ -12,8 +12,6 @@ function PlusThreeBug() {
     setBrokenCount(brokenCount + 1)
   }
 
-  // State в обработчике — snapshot текущего рендера; три setCount(count + 1)
-  // видят одно и то же значение. Для цепочки от предыдущего нужен functional updater.
   function handleFixedPlusThree() {
     setFixedCount((prev) => prev + 1)
     setFixedCount((prev) => prev + 1)
@@ -70,8 +68,6 @@ function MutationBug() {
     setTick((prev) => prev + 1)
   }
 
-  // State нельзя мутировать напрямую: React не видит новую ссылку и не делает render.
-  // Нужно передать через setter новый объект (например, через spread).
   function handleImmutableUpdate() {
     setFixedProfile((prev) => ({ ...prev, age: prev.age + 1 }))
   }
@@ -137,8 +133,6 @@ function DelayedReadBug() {
     setTimeout(() => setBrokenDelayed(brokenCount), 3000)
   }
 
-  // Callback замыкает snapshot; ref хранит актуальное значение между рендерами,
-  // поэтому отложенное чтение видит свежий count, а не count рендера «Старт».
   function handleFixedDelayedRead() {
     setFixedDelayed(null)
     setTimeout(() => setFixedDelayed(fixedCountRef.current), 3000)

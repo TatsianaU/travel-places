@@ -8,10 +8,6 @@ export function useRenderCount() {
   return currentRenderCount
 }
 
-// 1) Отстаёт: useEffect после commit, а смена ref сама по себе не вызывает render.
-// 2) StrictMode в development может дополнительно вызывать render/effect.
-// 3) Нечистый useRenderCount удобнее для временной диагностики прямо во время render.
-// 4) Цикла нет: effect меняет ref, а не state.
 export function useRenderCountSafe() {
   const renderCountRef = useRef(0)
 
