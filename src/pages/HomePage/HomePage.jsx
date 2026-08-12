@@ -2,6 +2,7 @@ import './HomePage.css'
 
 import { Link } from 'react-router-dom'
 
+import RenderBugsExample from '../../components/RenderBugsExample/RenderBugsExample'
 import { useAllPlacesQuery } from '../../features/places/useAllPlacesQuery'
 import { useRecentPlaces } from '../../features/recentPlaces/useRecentPlaces'
 
@@ -16,6 +17,8 @@ export default function HomePage() {
 
   return (
     <section className="home-page">
+      <RenderBugsExample />
+
       <div className="home-page__box">
         <h1 className="home-page__title">Добро пожаловать в Travel Places</h1>
         <p className="home-page__text">
