@@ -1,6 +1,6 @@
 import './RenderBugsExample.css'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 function PlusThreeBug() {
   const [brokenCount, setBrokenCount] = useState(0)
@@ -61,6 +61,7 @@ function MutationBug() {
   const [fixedProfile, setFixedProfile] = useState({ name: 'Ada', age: 20 })
 
   function handleMutate() {
+    // eslint-disable-next-line react-hooks/immutability
     brokenProfile.age += 1
   }
 
@@ -126,7 +127,10 @@ function DelayedReadBug() {
   const [fixedCount, setFixedCount] = useState(0)
   const [fixedDelayed, setFixedDelayed] = useState(null)
   const fixedCountRef = useRef(fixedCount)
-  fixedCountRef.current = fixedCount
+
+  useEffect(() => {
+    fixedCountRef.current = fixedCount
+  }, [fixedCount])
 
   function handleBrokenDelayedRead() {
     setBrokenDelayed(null)
