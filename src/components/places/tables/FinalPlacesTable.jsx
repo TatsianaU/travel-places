@@ -1,7 +1,5 @@
 import '../../PlaceTable/PlaceTable.css'
-import './FinalPlacesTable.css'
 
-import * as Popover from '@radix-ui/react-popover'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useState } from 'react'
 
@@ -41,46 +39,28 @@ export default function FinalPlacesTable({ places }) {
   return (
     <div className="place-table-wrapper">
       <div className="places-table-toolbar">
-        <Popover.Root>
-          <Popover.Trigger asChild>
-            <button
-              type="button"
-              className="places-table-columns-trigger"
-            >
-              Колонки
-            </button>
-          </Popover.Trigger>
-          <Popover.Portal>
-            <Popover.Content
-              className="places-table-columns-content"
-              align="end"
-              sideOffset={6}
-            >
-              <Popover.Arrow className="places-table-columns-arrow" />
-              <div className="places-table-columns-list">
-                {table.getAllLeafColumns().map((column) => {
-                  if (!column.getCanHide()) {
-                    return null
-                  }
+        <div className="places-table-columns">
+          <strong>Колонки:</strong>
+          {table.getAllLeafColumns().map((column) => {
+            if (!column.getCanHide()) {
+              return null
+            }
 
-                  return (
-                    <label
-                      key={column.id}
-                      className="places-table-columns-item"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={column.getIsVisible()}
-                        onChange={column.getToggleVisibilityHandler()}
-                      />
-                      {column.columnDef.meta?.label ?? column.id}
-                    </label>
-                  )
-                })}
-              </div>
-            </Popover.Content>
-          </Popover.Portal>
-        </Popover.Root>
+            return (
+              <label
+                key={column.id}
+                className="places-table-columns-item"
+              >
+                <input
+                  type="checkbox"
+                  checked={column.getIsVisible()}
+                  onChange={column.getToggleVisibilityHandler()}
+                />
+                {column.columnDef.meta?.label ?? column.id}
+              </label>
+            )
+          })}
+        </div>
 
         {hiddenCount > 0 && (
           <div className="places-table-hidden-hint">
