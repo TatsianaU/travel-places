@@ -53,8 +53,10 @@ export default function FinalPlacesTable({ places }) {
           <Popover.Portal>
             <Popover.Content
               className="places-table-columns-content"
+              aria-label="Настройки колонок"
               align="end"
               sideOffset={6}
+              collisionPadding={8}
             >
               <Popover.Arrow className="places-table-columns-arrow" />
               <div className="places-table-columns-list">

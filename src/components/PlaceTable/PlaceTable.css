@@ -66,21 +66,6 @@
   margin-bottom: 12px;
 }
 
-.places-table-columns {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-  color: #475569;
-}
-
-.places-table-columns-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-}
-
 .places-table-hidden-hint {
   display: flex;
   flex-wrap: wrap;

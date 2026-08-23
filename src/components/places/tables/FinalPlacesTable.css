@@ -37,7 +37,7 @@
 }
 
 .places-table-columns-content {
-  z-index: 50;
+  z-index: 950;
   min-width: 190px;
   padding: 6px;
   border: 1px solid var(--color-border);
