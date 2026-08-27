@@ -1,20 +1,31 @@
 import './TravelFeed.css'
 
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 import { useManyTravelPostsQuery } from '../../features/travelPosts/useManyTravelPostsQuery'
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
+import Skeleton from '../Skeleton/Skeleton'
 import TravelPostCard from '../TravelPostCard/TravelPostCard'
 import TravelFeedSkeletonRow from './TravelFeedSkeletonRow'
 
 const ROW_HEIGHT = 172
 
-const SKELETON_ROWS_COUNT = 5
+// Держим в синхроне с .travel-feed-scroll { height: 70vh } в TravelFeed.css.
+const SCROLL_HEIGHT_VH = 70
+
+function getSkeletonRowsCount() {
+  const scrollHeight = (window.innerHeight * SCROLL_HEIGHT_VH) / 100
+  return Math.max(1, Math.ceil(scrollHeight / ROW_HEIGHT))
+}
 
 export default function VirtualizedTravelPosts({ category = '' }) {
   const { data: posts, isPending, isError, error, refetch } = useManyTravelPostsQuery({ category })
   const scrollRef = useRef(null)
+
+  // Считаем один раз при монтировании: заглушки живут только во время загрузки,
+  // пересчитывать их на resize смысла нет
+  const [skeletonRowsCount] = useState(getSkeletonRowsCount)
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
@@ -41,17 +52,31 @@ export default function VirtualizedTravelPosts({ category = '' }) {
 
   return (
     <div className="travel-feed">
-      {!isPending && (
-        <div className="travel-feed-stats">
-          <span className="travel-feed-stat">
-            Всего записей в памяти: <strong>{posts.length}</strong>
-          </span>
-          <span className="travel-feed-stat">
-            Карточек сейчас в DOM: <strong>{virtualItems.length}</strong>
-          </span>
-          <span className="travel-feed-stat travel-feed-stat--hint">Скрольте список - в DOM остается лишь видимая часть + overscan (6)</span>
-        </div>
-      )}
+      <div className="travel-feed-stats">
+        <span className="travel-feed-stat">
+          Всего записей в памяти:{' '}
+          {isPending ? (
+            <Skeleton
+              width="42px"
+              height="14px"
+            />
+          ) : (
+            <strong>{posts.length}</strong>
+          )}
+        </span>
+        <span className="travel-feed-stat">
+          Карточек сейчас в DOM:{' '}
+          {isPending ? (
+            <Skeleton
+              width="28px"
+              height="14px"
+            />
+          ) : (
+            <strong>{virtualItems.length}</strong>
+          )}
+        </span>
+        <span className="travel-feed-stat travel-feed-stat--hint">Скрольте список - в DOM остается лишь видимая часть + overscan (6)</span>
+      </div>
 
       <div
         ref={scrollRef}
@@ -60,9 +85,9 @@ export default function VirtualizedTravelPosts({ category = '' }) {
       >
         {isPending ? (
           <>
-            {/* 5 заглушек — это примерно один экран при высоте контейнера 70vh;
+            {/* Количество заглушек считаем от 70vh и ROW_HEIGHT — примерно один экран,
                 заглушки для всех постов не создаём. */}
-            {Array.from({ length: SKELETON_ROWS_COUNT }, (_, index) => (
+            {Array.from({ length: skeletonRowsCount }, (_, index) => (
               <TravelFeedSkeletonRow
                 key={index}
                 rowHeight={ROW_HEIGHT}
