@@ -16,15 +16,19 @@ export default function PlaceList({ places, searchQuery, onEdit, wishlistIds, on
           Граница на уровне карточки: место - самостоятельная ячейка grid.
           Ошибка одной карточки не должна скрывать остальные.
           Вокруг кнопки "В избранное" граница избыточна - это действие внутри карточки, не отдельный виджет.
+          ErrorBoundary не знает props вложенной PlaceCard, поэтому PlaceList
+          передаёт id сверху через универсальный проп label.
         */}
         {places.map((place) => (
           <ErrorBoundary
             key={place.id}
+            label={`место ${place.id}`}
             fallback={({ error, reset }) => (
               <ErrorFallback
                 error={error}
                 onRetry={reset}
                 what="это место"
+                variant="compact"
               />
             )}
           >

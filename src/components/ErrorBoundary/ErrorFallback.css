@@ -63,3 +63,21 @@
   color: var(--color-text-muted);
   font-size: 0.95rem;
 }
+
+/* Компактный вариант занимает место карточки в сетке.
+   Размер задаёт grid-ячейка, поэтому убираем страничные внешние отступы. */
+.error-fallback--compact {
+  max-width: none;
+  margin: 0;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.error-fallback--compact .error-fallback-title {
+  font-size: 1rem;
+}
+
+.error-fallback--compact .error-fallback-message {
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+}

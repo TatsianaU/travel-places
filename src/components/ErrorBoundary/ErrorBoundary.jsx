@@ -8,7 +8,9 @@ class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, info) {
-    console.error('Ошибка рендера:', error, info.componentStack)
+    const { label } = this.props
+
+    console.error(label ? `Ошибка рендера (${label}):` : 'Ошибка рендера:', error, info.componentStack)
   }
 
   reset = () => {

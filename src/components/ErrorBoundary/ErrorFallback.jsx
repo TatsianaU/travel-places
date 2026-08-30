@@ -3,10 +3,12 @@ import './ErrorFallback.css'
 import { RotateCcw } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-export default function ErrorFallback({ error, onRetry, what = 'этот блок' }) {
+export default function ErrorFallback({ error, onRetry, what = 'этот блок', variant = 'page' }) {
+  const isCompact = variant === 'compact'
+
   return (
     <div
-      className="error-fallback"
+      className={isCompact ? 'error-fallback error-fallback--compact' : 'error-fallback'}
       role="alert"
     >
       <h2 className="error-fallback-title">Что-то пошло не так</h2>
@@ -24,12 +26,14 @@ export default function ErrorFallback({ error, onRetry, what = 'этот бло�
           Попробовать снова
         </button>
 
-        <Link
-          to="/"
-          className="error-fallback-link"
-        >
-          На главную
-        </Link>
+        {!isCompact && (
+          <Link
+            to="/"
+            className="error-fallback-link"
+          >
+            На главную
+          </Link>
+        )}
       </div>
     </div>
   )
