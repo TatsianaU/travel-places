@@ -6,7 +6,6 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import ClickCounter from '../../components/ClickCounter/ClickCounter'
 import Clock from '../../components/Clock/Clock'
 import CountryFilter from '../../components/CountryFilter/CountryFilter'
-import ErrorMessage from '../../components/ErrorMessage/ErrorMessage'
 import Greeting from '../../components/Greeting/Greeting'
 import MousePosition from '../../components/MousePosition/MousePosition'
 import Pagination from '../../components/Pagination/Pagination'
@@ -80,7 +79,6 @@ export default function PlacesPage() {
   const items = placesQuery.data?.items ?? 0
 
   const isInitialLoading = placesQuery.isPending
-  const isError = placesQuery.isError
   const isRefreshing = placesQuery.isFetching && !placesQuery.isPending
 
   const countries = [...new Set(data.map((place) => place.country))]
@@ -339,11 +337,6 @@ export default function PlacesPage() {
         <Section title="Популярные направления">
           {isInitialLoading ? (
             <Spinner />
-          ) : isError ? (
-            <ErrorMessage
-              message="Не удалось загрузить данные"
-              onRetry={placesQuery.refetch}
-            />
           ) : visiblePlaces.length === 0 ? (
             <div className="places-empty">
               {hasActiveFilters ? (
@@ -374,7 +367,7 @@ export default function PlacesPage() {
           )}
         </Section>
 
-        {!isInitialLoading && !isError && (
+        {!isInitialLoading && (
           <Pagination
             page={page}
             pages={pages}
