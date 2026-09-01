@@ -1,0 +1,83 @@
+.error-fallback {
+  max-width: 640px;
+  margin: 40px auto;
+  padding: 28px 32px;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background-color: var(--color-surface);
+  text-align: center;
+}
+
+.error-fallback-title {
+  margin: 0 0 10px;
+  font-size: 1.3rem;
+  color: var(--color-text);
+}
+
+.error-fallback-message {
+  margin: 0 0 18px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.error-fallback-details {
+  margin: 0 0 18px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background-color: var(--color-bg);
+  color: var(--color-text-muted);
+  font-family: monospace;
+  font-size: 0.8rem;
+  text-align: left;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.error-fallback-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.error-fallback-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--color-accent);
+  color: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.error-fallback-button:hover {
+  background-color: #5a67d8;
+}
+
+.error-fallback-link {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+/* Компактный вариант занимает место карточки в сетке.
+   Размер задаёт grid-ячейка, поэтому убираем страничные внешние отступы. */
+.error-fallback--compact {
+  max-width: none;
+  margin: 0;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.error-fallback--compact .error-fallback-title {
+  font-size: 1rem;
+}
+
+.error-fallback--compact .error-fallback-message {
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+}

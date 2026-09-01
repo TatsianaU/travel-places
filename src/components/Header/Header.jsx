@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom'
 
 import ThemeToggle from '../ThemeToggle/ThemeToggle'
 
-export default function Header() {
+export default function Header({ onPreloadLargeFeed }) {
   return (
     <header className="header">
       <ThemeToggle />
@@ -30,9 +30,20 @@ export default function Header() {
           >
             Места
           </NavLink>
+          {/*
+            Большую ленту загружаем заранее: это тяжёлая страница,
+            а наведение показывает, что пользователь, вероятно, хочет её открыть.
+
+            Для лёгких и редко посещаемых страниц предзагрузка не нужна:
+            их код может загрузиться зря и потратить трафик.
+
+            На мобильных устройствах наведения нет, поэтому при переходе
+            загрузку страницы по-прежнему показывает PageSkeleton.
+          */}
           <NavLink
             to="/places/feed"
             className={({ isActive }) => `header-link ${isActive ? 'active' : ''}`}
+            onMouseEnter={onPreloadLargeFeed}
           >
             Большая лента
           </NavLink>
