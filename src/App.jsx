@@ -2,7 +2,7 @@ import './App.css'
 
 import { QueryErrorResetBoundary } from '@tanstack/react-query'
 import { lazy, Suspense } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 
 import CompareBar from './components/CompareBar/CompareBar'
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary'
@@ -23,81 +23,95 @@ const loadLargeFeedPage = () => import('./pages/LargeFeedPage/LargeFeedPage')
 const LargeFeedPage = lazy(loadLargeFeedPage)
 
 function preloadLargeFeedPage() {
-  return loadLargeFeedPage()
+  return loadLargeFeedPage().catch(() => {})
 }
 
 function App() {
+  const location = useLocation()
+
   return (
     <div className="app">
       <Header onPreloadLargeFeed={preloadLargeFeedPage} />
 
       <div className="app__content">
-        <Suspense fallback={<PageSkeleton />}>
-          <Routes>
-            <Route
-              path="/"
-              element={<HomePage />}
+        <ErrorBoundary
+          key={location.pathname}
+          label={`страница ${location.pathname}`}
+          fallback={({ error, reset }) => (
+            <ErrorFallback
+              error={error}
+              onRetry={reset}
+              what="эту страницу"
             />
-            {/*
+          )}
+        >
+          <Suspense fallback={<PageSkeleton />}>
+            <Routes>
+              <Route
+                path="/"
+                element={<HomePage />}
+              />
+              {/*
             throwOnError на PlacesPage: ошибка запроса уходит в границу, а не в JSX страницы.
             Плюс — меньше дублирования isError/refetch на каждой странице.
             Минус — при ошибке пропадает вся вёрстка страницы, а не только блок с данными.
             Для списка с фильтрами в реальном проекте чаще оставила бы локальный error UI.
           */}
-            <Route
-              path="/places"
-              element={
-                <QueryErrorResetBoundary>
-                  {({ reset }) => (
-                    <ErrorBoundary
-                      label="страница мест"
-                      fallback={({ error, reset: resetBoundary }) => (
-                        <ErrorFallback
-                          error={error}
-                          what="эту страницу"
-                          onRetry={() => {
-                            reset()
-                            resetBoundary()
-                          }}
-                        />
-                      )}
-                    >
-                      <PlacesPage />
-                    </ErrorBoundary>
-                  )}
-                </QueryErrorResetBoundary>
-              }
-            />
-            <Route
-              path="/places/feed"
-              element={<LargeFeedPage />}
-            />
-            <Route
-              path="/favorites"
-              element={<FavoritesPage />}
-            />
-            <Route
-              path="/places/new"
-              element={<CreatePlacePage />}
-            />
-            <Route
-              path="/places/:id/edit"
-              element={<EditPlacePage />}
-            />
-            <Route
-              path="/places/:id"
-              element={<PlaceDetailsPage />}
-            />
-            <Route
-              path="/about"
-              element={<AboutPage />}
-            />
-            <Route
-              path="*"
-              element={<NotFoundPage />}
-            />
-          </Routes>
-        </Suspense>
+              <Route
+                path="/places"
+                element={
+                  <QueryErrorResetBoundary>
+                    {({ reset }) => (
+                      <ErrorBoundary
+                        label="страница мест"
+                        fallback={({ error, reset: resetBoundary }) => (
+                          <ErrorFallback
+                            error={error}
+                            what="эту страницу"
+                            onRetry={() => {
+                              reset()
+                              resetBoundary()
+                            }}
+                          />
+                        )}
+                      >
+                        <PlacesPage />
+                      </ErrorBoundary>
+                    )}
+                  </QueryErrorResetBoundary>
+                }
+              />
+              <Route
+                path="/places/feed"
+                element={<LargeFeedPage />}
+              />
+              <Route
+                path="/favorites"
+                element={<FavoritesPage />}
+              />
+              <Route
+                path="/places/new"
+                element={<CreatePlacePage />}
+              />
+              <Route
+                path="/places/:id/edit"
+                element={<EditPlacePage />}
+              />
+              <Route
+                path="/places/:id"
+                element={<PlaceDetailsPage />}
+              />
+              <Route
+                path="/about"
+                element={<AboutPage />}
+              />
+              <Route
+                path="*"
+                element={<NotFoundPage />}
+              />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
       </div>
 
       <Footer />
