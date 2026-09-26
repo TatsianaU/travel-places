@@ -8,5 +8,6 @@ export function usePlacesQuery(params) {
     queryKey: placesKeys.list(params),
     queryFn: () => fetchPlacesPage(params),
     placeholderData: (previousData) => previousData,
+    throwOnError: (error, query) => query.state.data === undefined,
   })
 }
