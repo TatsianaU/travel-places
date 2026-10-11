@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
+    "test": "vitest",
+    "test:run": "vitest run",
     "preview": "vite preview",
     "serve:api": "json-server --watch db.json --port 3001",
     "generate:travel-posts": "node scripts/generate-travel-posts.mjs"
@@ -45,6 +47,7 @@
     "eslint-plugin-simple-import-sort": "^13.0.0",
     "globals": "^17.4.0",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "vite": "^8.0.4"
+    "vite": "^8.0.4",
+    "vitest": "^5.0.3"
   }
 }
