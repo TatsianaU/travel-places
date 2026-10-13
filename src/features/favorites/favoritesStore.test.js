@@ -14,6 +14,7 @@ describe('favoritesStore', () => {
     useFavoritesStore.getState().addFavorite('place-1')
 
     expect(listener).toHaveBeenCalledTimes(1)
+    expect(useFavoritesStore.getState().favoriteIds).toEqual(['place-1'])
 
     unsubscribe()
   })
@@ -79,5 +80,27 @@ describe('favoritesStore', () => {
 
     expect(useFavoritesStore.getState().favoriteIds).toEqual(['place-1', 'place-2'])
     expect(listener).toHaveBeenCalledTimes(1)
+  })
+
+  it('toggleFavorite добавляет место, которого ещё нет в избранном', () => {
+    useFavoritesStore.getState().toggleFavorite('place-1')
+
+    expect(useFavoritesStore.getState().favoriteIds).toEqual(['place-1'])
+  })
+
+  it('toggleFavorite удаляет только указанное место из избранного', () => {
+    useFavoritesStore.setState({ favoriteIds: ['place-1', 'place-2'] })
+
+    useFavoritesStore.getState().toggleFavorite('place-1')
+
+    expect(useFavoritesStore.getState().favoriteIds).toEqual(['place-2'])
+  })
+
+  it('clearFavorites очищает непустое избранное', () => {
+    useFavoritesStore.setState({ favoriteIds: ['place-1', 'place-2'] })
+
+    useFavoritesStore.getState().clearFavorites()
+
+    expect(useFavoritesStore.getState().favoriteIds).toEqual([])
   })
 })
