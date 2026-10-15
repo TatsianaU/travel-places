@@ -13,7 +13,7 @@ export function toastReducer(state, action) {
     }
 
     default: {
-      throw new Error(`Неизвестный action: ${action.type}`)
+      throw new Error(`Неизвестное действие: ${action.type}`)
     }
   }
 }
