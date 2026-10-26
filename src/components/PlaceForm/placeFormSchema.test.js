@@ -134,4 +134,60 @@ describe('placeFormSchema', () => {
       expect(fieldErrors.visitedYear[0]).toContain('год обязателен')
     }
   })
+
+  it('Принимает посещённое место с годом на границах диапазона: 1900 и текущий год', () => {
+    const validData = {
+      title: 'Эйфелева башня',
+      country: 'Франция',
+      city: 'Париж',
+      description: 'Знаменитая башня в центре Парижа',
+      imageUrl: 'https://example.com/paris.jpg',
+      status: 'planned',
+      visitedYear: undefined,
+    }
+
+    const withMinYear = placeFormSchema.safeParse({
+      ...validData,
+      status: 'visited',
+      visitedYear: 1900,
+    })
+
+    const withCurrentYear = placeFormSchema.safeParse({
+      ...validData,
+      status: 'visited',
+      visitedYear: new Date().getFullYear(),
+    })
+
+    expect(withMinYear.success).toBe(true)
+    expect(withCurrentYear.success).toBe(true)
+  })
+
+  it('Пустое поле года считается отсутствием года', () => {
+    const validData = {
+      title: 'Эйфелева башня',
+      country: 'Франция',
+      city: 'Париж',
+      description: 'Знаменитая башня в центре Парижа',
+      imageUrl: 'https://example.com/paris.jpg',
+      status: 'planned',
+      visitedYear: undefined,
+    }
+
+    const invalidData = {
+      ...validData,
+      status: 'visited',
+      visitedYear: NaN,
+    }
+
+    const result = placeFormSchema.safeParse(invalidData)
+
+    expect(result.success).toBe(false)
+
+    if (!result.success) {
+      const fieldErrors = z.flattenError(result.error).fieldErrors
+
+      expect(fieldErrors.visitedYear).toBeDefined()
+      expect(fieldErrors.visitedYear[0]).toContain('год обязателен')
+    }
+  })
 })
