@@ -49,7 +49,7 @@ export default function PlaceCard({
   const StatusIcon = statusConfig?.icon
 
   return (
-    <div className="place-card">
+    <article className="place-card">
       <img
         className="place-card-image"
         src={imageUrl}
@@ -131,6 +131,6 @@ export default function PlaceCard({
 
         {children}
       </div>
-    </div>
+    </article>
   )
 }
