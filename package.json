@@ -50,6 +50,7 @@
     "eslint-plugin-simple-import-sort": "^13.0.0",
     "globals": "^17.4.0",
     "jsdom": "^29.1.1",
+    "msw": "^2.15.0",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "vite": "^8.0.4",
     "vitest": "^5.0.3"
