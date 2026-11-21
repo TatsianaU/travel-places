@@ -5,7 +5,12 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    port: 5173,
+    strictPort: true,
+  },
   test: {
     environment: 'node',
+    exclude: ['**/node_modules/**', '**/e2e/**', '**/dist/**'],
   },
 })
