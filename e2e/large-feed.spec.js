@@ -9,6 +9,7 @@ test('подгружает следующую страницу ленты при
   await page.goto('/places/feed')
 
   await page.getByRole('button', { name: 'Автоподгрузка' }).click()
+  await expect(page.getByRole('button', { name: 'Автоподгрузка', pressed: true })).toBeVisible()
 
   await expect(page.getByText('Загружено карточек: 20 из 2000')).toBeVisible()
   await expect(page.getByRole('article')).toHaveCount(20)
